@@ -1,0 +1,47 @@
+ManifestFileVersion: 0
+CRC: 2324514191
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 21c31a1f31cd7f598a736b350ade902d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21c99c86a43ad817b2cb7f65458ae090
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Oculus/SampleFramework/Usage/GuardianBoundarySystem/Materials/DebugDrawLine.mat
+- Assets/Models/Materials/Areola.mat
+- Assets/Models/Materials/silhouette_Lady_Silhouette1.mat
+- Assets/Models/Materials/Placenta_Texture.mat
+- Assets/Models/Materials/Merged_Lady_Aperture_XSIPOLYCLS_aperture1.mat
+- Assets/Oculus/SampleFramework/Core/Locomotion/Materials/TeleportLaser.mat
+- Assets/Models/Materials/Merged_Lady_Iris_XSIPOLYCLS_iris3.mat
+- Assets/Models/Materials/Lady_Material1.mat
+- Assets/Models/Materials/pasted__Areola1.mat
+- Assets/Models/Materials/phong1.mat
+- Assets/Models/Materials/Merged_Lady_Iris_XSIPOLYCLS_iris1.mat
+- Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Materials/SkyboxForRealtime.mat
+- Assets/Oculus/VR/Materials/Arrow.mat
+- Assets/Models/Materials/hair_Material.mat
+- Assets/Models/Materials/Uterus_Pregnant_Texture.mat
+- Assets/Models/Materials/Merged_Lady_eye_white3.mat
+- Assets/Models/Materials/lips_Material.mat
+- Assets/Models/Materials/Merged_Lady_Aperture_XSIPOLYCLS_aperture3.mat
+- Assets/Models/Materials/Clothes.mat
+- Assets/Models/Materials/pasted__Lady_Material3.mat
+- Assets/Models/Materials/Merged_Lady_eye_white1.mat
+- Assets/Models/Materials/pasted__lip1.mat
+- Assets/Models/Materials/lip.mat
+- Assets/Models/Materials/Areola_Material.mat
+- Assets/Models/Materials/Merged_Lady_hair3.mat
+- Assets/Models/Materials/Lady_Material.mat
+Dependencies:
+- E:/academic/IC/DT/simulation_project/simulation_demo/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0
+- E:/academic/IC/DT/simulation_project/simulation_demo/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_shader0

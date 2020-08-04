@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 4205995238
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 78a1006af3447fe84a43d6acfe89c9f8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c14d841b0224dd0a401232617b4189df
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/pregnant_woman_fbx.fbx
+- Assets/Models/pregant_woman.fbx
+- Assets/Oculus/VR/Meshes/OculusGoController/OculusGoController.fbx
+Dependencies:
+- E:/academic/IC/DT/simulation_project/simulation_demo/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0
