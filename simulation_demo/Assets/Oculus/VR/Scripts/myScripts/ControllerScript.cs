@@ -11,7 +11,6 @@ public class ControllerScript : MonoBehaviour
     public OVRPlayerController cam;
     public GameObject belly;
     public GameObject fetus_head;
-    public LineRenderer fetus_line;
     public Material surgeon_area;
     public Material non_surgeon_area;
     public Material fetus_head_area;
@@ -21,13 +20,15 @@ public class ControllerScript : MonoBehaviour
     private int modify_index;
     private Vector3[] original_pos;
     private Vector3[] original_normals;
+    private bool m_isOculusGo;
 
 
     // Gaussian
     float inv_denominator;
-    public float theta = 5f;
+    public float theta = 0.5f;
     public float max_dz = 0.02f;
     public float affect_region = 0.04f;
+    public float touch_vibration_freq = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class ControllerScript : MonoBehaviour
         original_pos = belly.GetComponent<MeshFilter>().sharedMesh.vertices;
         original_normals = belly.GetComponent<MeshFilter>().sharedMesh.normals;
         inv_denominator = 1 / (2 * Mathf.PI * theta * theta);
+        m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
     }
 
     // Update is called once per frame
@@ -73,8 +75,6 @@ public class ControllerScript : MonoBehaviour
     // Check the laser collision point with the belly mesh
     void CheckIntersection()
     {
-        // TODO change to oculus for debug
-
         // Change the position of the controller
 
 #if UNITY_EDITOR
@@ -96,28 +96,47 @@ public class ControllerScript : MonoBehaviour
             {
                 if (!push) // not triggered
                 {
-                    int hit_vertex = findClosestVertex(hit);
-                    // help_text.text = "No cut path, hit at vertex" + hit_vertex;
                     help_text.text = "Not pushed";
-                    path = new List<int>();
                     modify_index = -1;
+                    
+                    // change the line material
                     laser_line_renderer.sharedMaterial = surgeon_area;
                     if (sound_effect.isPlaying)
                         sound_effect.Stop();
+
+                    // disable the vibration
+                    OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+
+                    // disable the sound in Oculus Go
+                    if (m_isOculusGo)
+                    {
+                        
+                        if (sound_effect.isPlaying)
+                            sound_effect.Stop();
+                    }
                 }
                 else //triggered
                 {
+                    // find the push vertex
                     int hit_vertex = findClosestVertex(hit);
-                    if (!path.Contains(hit_vertex))
-                        path.Add(hit_vertex);
-                    string path_str = "";
-                    path.ForEach(num => path_str += (num.ToString() + ", "));
-                    // help_text.text = "Cut path:" + path_str;
-                    // help_text.text = "push at vertex " + hit_vertex;
                     help_text.text = "Pushed";
+
+                    // avoid continuous push action
                     if (hit_vertex != modify_index)
                         ResetModel();
                     modify_index = hit_vertex;
+                    
+                    // enable the vibration
+                    OVRInput.SetControllerVibration(touch_vibration_freq, touch_vibration_freq, OVRInput.Controller.RTouch);
+
+                    // enable the sound in Oculus Go
+                    if (m_isOculusGo)
+                    {
+                        if (!sound_effect.isPlaying)
+                            sound_effect.Play();
+                        sound_effect.volume = touch_vibration_freq;
+                    }
+
                 }
             }
 
@@ -127,16 +146,24 @@ public class ControllerScript : MonoBehaviour
         else // not in the surgeon area
         {
             help_text.text = "No intersection";
-            path = new List<int>();
             laser_line_renderer.SetPosition(1, transform.forward * 10000);
             laser_line_renderer.sharedMaterial = non_surgeon_area;
-            if (sound_effect.isPlaying)
-                sound_effect.Stop();
+
+            // disable the vibration
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+
+            // disable the sound in Oculus Go
+            if (m_isOculusGo)
+            {
+
+                if (sound_effect.isPlaying)
+                    sound_effect.Stop();
+            }
         }
         laser_line_renderer.SetPosition(0, transform.position);
     }
 
-    // get the direction from the controller pad
+    // get the move direction from user
     Vector2 GetDirection()
     {
         // find the correct direction
@@ -160,7 +187,12 @@ public class ControllerScript : MonoBehaviour
         else
             return Vector2.zero;
 #else
-        Vector2 coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
+        Vector2 coord = Vector2.zero;
+        if (m_isOculusGo) // Oculus Go
+            coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
+        else // Oculus Quest
+            coord = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+
         Vector2 best_match_dir = Vector2.zero;
         float max = Mathf.NegativeInfinity;
         foreach (Vector2 vec in directions)
@@ -251,71 +283,70 @@ public class ControllerScript : MonoBehaviour
 
         // calculate ratio and interpolate between 0 and max dz
         change_vertices = change_vertices.ToDictionary(x => x.Key, x => (x.Value - min_gaussian) / (max_gaussian - min_gaussian));
-        bool head_flag = false;
+        int[] fetus_status_count = { 0, 0, 0 };
         foreach (var vertex in change_vertices)
         {
+            // use push direction and factor to calculate the change 
             float push_delta_factor = Mathf.Lerp(0, max_dz, vertex.Value);
-            //Vector3 norm = normals[vertex.Key];
-            //Vector3 push_point_norm = belly.transform.TransformDirection(norm); // to world direction
             Vector3 push_point_dir = -transform.forward;
             Vector3 push_delta_change = new Vector3(push_point_dir.x * push_delta_factor, push_point_dir.y * push_delta_factor, push_point_dir.z * push_delta_factor);
+
             vertices[vertex.Key].x -= push_delta_change.x;
             vertices[vertex.Key].y -= push_delta_change.y;
             vertices[vertex.Key].z -= push_delta_change.z;
-            //print("push: x = " + push_delta_change.x + "y = " + push_delta_change.y + "z = " + push_delta_change.z);
-            Vector3 push_point = belly.transform.TransformPoint(vertices[vertex.Key]); // to world position
-            Vector3 fetus_delta_change = CheckFetusPos(push_point, push_point_dir);
-            fetus_delta_change = belly.transform.InverseTransformVector(fetus_delta_change);
-            //print("refine: x = " + fetus_delta_change.x + "y = " + fetus_delta_change.y + "z = " + fetus_delta_change.z);
-            
 
-            
-            // avoid moving above original pos
-            if (fetus_delta_change.y - push_delta_change.y > 0 || 
-                ((fetus_delta_change.z - push_delta_change.z > 0) && (fetus_delta_change.z > 0)) ||
-                ((fetus_delta_change.z - push_delta_change.z < 0) && (fetus_delta_change.z < 0)))
+            Vector3 push_point = belly.transform.TransformPoint(vertices[vertex.Key]); // to world position
+            int fetus_status = CheckFetusPos(push_point, push_point_dir);
+
+            if (fetus_status == 1 || fetus_status == 2)
             {
-                vertices[vertex.Key].x = original_pos[vertex.Key].x;
-                vertices[vertex.Key].y = original_pos[vertex.Key].y;
-                vertices[vertex.Key].z = original_pos[vertex.Key].z;
+                vertices[vertex.Key].x += 0.5f * push_delta_change.x;
+                vertices[vertex.Key].y += 0.5f * push_delta_change.y;
+                vertices[vertex.Key].z += 0.5f * push_delta_change.z;
+                if (fetus_status == 1) // head count++
+                    fetus_status_count[1]++;
+                else if (fetus_status == 2) // other count++
+                    fetus_status_count[2]++;
             }
             else
             {
-                vertices[vertex.Key].x += fetus_delta_change.x;
-                vertices[vertex.Key].y += fetus_delta_change.y;
-                vertices[vertex.Key].z += fetus_delta_change.z;
+                fetus_status_count[0]++; //nothing count++
             }
             
-            if (!head_flag)
-            {
-                if (fetus_delta_change.y != 0 )
-                    head_flag = true;
-            }
+            
         }
 
-        if (head_flag)
-        {
-            help_text.text = "Something is here";
-            laser_line_renderer.sharedMaterial = fetus_head_area;
-            if(!sound_effect.isPlaying)
-                sound_effect.Play();
-        }
-        else
+        // calculate the ratio of fetus component in the pushed areas
+        float ratio = (float)(fetus_status_count[1] + fetus_status_count[2]) / (float)fetus_status_count.Sum();
+
+        // change the material according to the max region
+        if (fetus_status_count.Max() == fetus_status_count[0])
         {
             help_text.text = "Not touched anything";
             laser_line_renderer.sharedMaterial = surgeon_area;
-            if (sound_effect.isPlaying)
-                sound_effect.Stop();
+        }
+        else if (fetus_status_count.Max() == fetus_status_count[1])
+        {
+            help_text.text = "Head is here";
+            laser_line_renderer.sharedMaterial = fetus_head_area;
+        }
+        else
+        {
+            help_text.text = "Something is here";
+            laser_line_renderer.sharedMaterial = fetus_head_area;
         }
 
-        // debug pos and norm
+        // enable the vibration
+        float freq = touch_vibration_freq + (1f - touch_vibration_freq) * ratio;
+        OVRInput.SetControllerVibration(freq, freq, OVRInput.Controller.RTouch); // not in Oculus go
 
-        Vector3 pos, dir;
-        pos = belly.transform.TransformPoint(original_pos[modify_index]); // to world position
-        dir = new Vector3(0f, -1f, 0f);
-       
-        fetus_line.SetPosition(0, pos); // debug position
-        fetus_line.SetPosition(1, pos - 20 * dir);
+        // play the sound in Oculus Go
+        if (m_isOculusGo)
+        {
+            if (!sound_effect.isPlaying)
+                sound_effect.Play();
+            sound_effect.volume = freq;
+        }
 
         // update the belly mesh filter
         mesh_to_modify.vertices = vertices;
@@ -333,7 +364,7 @@ public class ControllerScript : MonoBehaviour
         */
     }
 
-    Vector3 CheckFetusPos(Vector3 pos, Vector3 norm)
+    int CheckFetusPos(Vector3 pos, Vector3 norm)
     {
         //  Ray ray = new Ray(pos, new Vector3(0f, -1f, 0f)); // vertical dir
         Ray ray = new Ray(pos, -norm); // norm dir
@@ -342,28 +373,22 @@ public class ControllerScript : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(ray, 15f).OrderBy(h => h.distance).ToArray();
         
         if (hits.Length > 0  && hits[0].collider.tag == "Head")
-        {
-            print(hits[0].distance);
-            
-            if (hits[0].distance < 10f)
+        {           
+            if (hits[0].distance < 13f)
             {
-                float dis = (10f - hits[0].distance) * 0.2f;
-                return new Vector3(dis * norm.x, dis * norm.y, dis * norm.z);
+                return 1;
             }
         }
 
         if (hits.Length > 0 && hits[0].collider.tag == "Back")
         {
-            print(hits[0].distance);
-
-            if (hits[0].distance < 5f)
+            if (hits[0].distance < 13f)
             {
-                float dis = (5f - hits[0].distance) * 0.2f;
-                return new Vector3(dis * norm.x, dis * norm.y, dis * norm.z);
+                return 2;
             }
         }
-        
-        return Vector3.zero;
+
+        return 0;
     }
 
     void ResetModel()
@@ -371,8 +396,6 @@ public class ControllerScript : MonoBehaviour
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         mesh_to_modify.vertices = original_pos;
         mesh_to_modify.normals = original_normals;
-        belly.GetComponent<MeshCollider>().sharedMesh = null;
-        belly.GetComponent<MeshCollider>().sharedMesh = mesh_to_modify;
     }
 }
 

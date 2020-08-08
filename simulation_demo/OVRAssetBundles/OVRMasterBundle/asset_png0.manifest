@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2772315478
+CRC: 191960808
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4a667310cc8f55d56170e5a8ddf7bb3a
+    Hash: 8eab0f75f63d40dc09f72089f7f63861
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2ed26e3ad9f6be9c24f85f5f5b54339d
@@ -12,5 +12,5 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 Assets:
-- Assets/Oculus/VR/Textures/cube_texture.png
+- Assets/Oculus/VR/Textures/HandTracking/HandTracking_uvmap_2048.png
 Dependencies: []

@@ -219,8 +219,6 @@
     <Compile Include="Assets\Oculus\Spatializer\scripts\ONSPVersion.cs" />
     <Compile Include="Assets\Oculus\Spatializer\scripts\OculusSpatializerUnity.cs" />
     <Compile Include="Assets\Oculus\Spatializer\scripts\helpers\ONSPReflectionZone.cs" />
-    <Compile Include="Assets\UpdateCollider.cs" />
-    <Compile Include="Assets\massPringScript.cs" />
     <None Include="Assets\Oculus\SampleFramework\Usage\HandsTrainExample\Shaders\XingLightShader.shader" />
     <None Include="Assets\Oculus\Avatar\Resources\Materials\AvatarMaterialStateShader.cginc" />
     <None Include="Assets\Oculus\SampleFramework\Usage\HandsTrainExample\Shaders\ButtonGlow.shader" />
@@ -250,7 +248,6 @@
     <None Include="Assets\Oculus\SampleFramework\Usage\OVROverlayCanvas\Shaders\UI Prerendered Opaque.shader" />
     <None Include="Assets\Oculus\SampleFramework\Core\Video\Plugins\Android\Audio360\NOTICE.txt" />
     <None Include="Assets\Oculus\SampleFramework\Usage\Locomotion\Shaders\TriPlanarWorld.shader" />
-    <None Include="Assets\NewSurfaceShader.shader" />
     <None Include="Assets\Oculus\SampleFramework\Core\Video\Plugins\Android\Audio360\ThirdPartyNotices.txt" />
     <None Include="Assets\Oculus\SampleFramework\Usage\OVROverlayCanvas\Shaders\UI Prerendered.shader" />
     <None Include="Assets\Oculus\Avatar\Samples\CrossPlatform\Readme.txt" />
@@ -798,58 +795,58 @@
       <HintPath>D:/software/unity/2019.3.12f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Management">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Subsystem.Registration">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Subsystem.Registration.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Oculus">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Oculus.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Oculus.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Oculus.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Oculus.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Oculus.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XR.LegacyInputHelpers">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Management.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Management.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.XR.Management.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.SpatialTracking">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.XR.LegacyInputHelpers">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/Downloads/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

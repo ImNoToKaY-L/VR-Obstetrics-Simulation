@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1994125029
+CRC: 2622510648
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f760c343f62c84ae606009502070a206
+    Hash: a010dddd33d568e2bc0096daa185890f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2ed26e3ad9f6be9c24f85f5f5b54339d
@@ -14,6 +14,4 @@ ClassTypes:
 Assets:
 - Assets/Models/aa.fbm/Uterus_Pregnant_Texture.jpg
 - Assets/Models/aa.fbm/Placenta_Texture.jpg
-- Assets/Models/pregnant_woman_fbx.fbm/Placenta_Texture.jpg
-- Assets/Models/pregnant_woman_fbx.fbm/Uterus_Pregnant_Texture.jpg
 Dependencies: []
