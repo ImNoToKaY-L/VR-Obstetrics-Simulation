@@ -1484,9 +1484,10 @@ MonoBehaviour:
   non_surgeon_area: {fileID: 2100000, guid: 669025377795b574da66d9bb2472fcab, type: 2}
   fetus_head_area: {fileID: 2100000, guid: a379cec2ba497874788d17eb312c61be, type: 2}
   sound_effect: {fileID: 594693803}
-  theta: 0.5
+  theta: 0.01
   max_dz: 0.02
   affect_region: 0.04
+  touch_vibration_freq: 0.1
 --- !u!4 &2071440906
 Transform:
   m_ObjectHideFlags: 0

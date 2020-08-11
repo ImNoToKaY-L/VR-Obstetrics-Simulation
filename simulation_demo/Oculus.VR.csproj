@@ -128,6 +128,8 @@
     <Compile Include="Assets\Oculus\VR\Scripts\Util\OVRVignette.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\Util\OVRWaitCursor.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\ControllerScript.cs" />
+    <Compile Include="Assets\Oculus\VR\Scripts\myScripts\ControllerScript_massVer.cs" />
+    <Compile Include="Assets\Oculus\VR\Scripts\myScripts\MassSpringScript.cs" />
     <Compile Include="Assets\Oculus\VR\ThirdParty\SimpleJSON.cs" />
     <Compile Include="Assets\Oculus\VR\ThirdParty\SimpleJSONUnity.cs" />
     <Compile Include="Assets\Oculus\VR\ThirdParty\openvr_api.cs" />
@@ -695,10 +697,10 @@
       <HintPath>D:/software/unity/2019.3.12f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

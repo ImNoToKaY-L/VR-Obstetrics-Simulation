@@ -3,7 +3,7 @@ CRC: 1619885969
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b5c8317924e8c31382b78647b4ea21f4
+    Hash: 8f136aec77767ce47c761ef9dd87ad6b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2ca5b777dc1d2ba447857ce6613c711e
@@ -40,5 +40,5 @@ Assets:
 - Assets/Models/fetus.mb
 - Assets/Models/Pregnant_Fetus_Uterus_2008.mb
 Dependencies:
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0

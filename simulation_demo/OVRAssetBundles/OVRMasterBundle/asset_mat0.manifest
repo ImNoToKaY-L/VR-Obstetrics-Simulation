@@ -3,7 +3,7 @@ CRC: 205508486
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 40409d8fed4a4a7d6b018a59f34d89e9
+    Hash: 10ed3c620429d17309487e4985902f53
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
@@ -24,5 +24,5 @@ Assets:
 - Assets/Models/Materials/hair_Material.mat
 - Assets/Oculus/VR/Materials/BasicHandMaterial.mat
 Dependencies:
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_shader0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_png0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_shader0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_png0

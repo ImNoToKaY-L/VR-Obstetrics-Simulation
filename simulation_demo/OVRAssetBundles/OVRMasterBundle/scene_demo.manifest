@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4070331318
+CRC: 1227624089
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ded4a86e2f7c010a6e3c1954d6072061
+    Hash: cf98362c07b31ed2a076a276401f24bf
   TypeTreeHash:
     serializedVersion: 2
-    Hash: faad39f379527953a801dfd28de21072
+    Hash: 163022435a4a5a5dc0a02efee223a6c6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -92,10 +92,10 @@ ClassTypes:
 Assets:
 - Assets/demo.unity
 Dependencies:
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_3ds0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mb0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mixer0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_fbx0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_prefab0
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_wav0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_3ds0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mb0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mixer0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_fbx0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_prefab0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_wav0

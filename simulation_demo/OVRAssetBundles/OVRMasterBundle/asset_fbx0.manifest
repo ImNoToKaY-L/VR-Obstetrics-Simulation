@@ -3,7 +3,7 @@ CRC: 789354395
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ab06423d6d3b8c7f602234a9b4ef4691
+    Hash: 5c68e07574c28d0fea5e5f59b897d7eb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6b9838b88f22990a44e206706a735ec8
@@ -31,4 +31,4 @@ Assets:
 - Assets/Models/pregnant_woman_fbx.fbx
 - Assets/Oculus/VR/Meshes/OculusGoController/OculusGoController.fbx
 Dependencies:
-- E:/academic/IC/DT/VR-Obstetrics-Simulation-master/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0
+- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0

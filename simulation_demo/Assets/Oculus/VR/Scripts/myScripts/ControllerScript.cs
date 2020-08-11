@@ -16,7 +16,6 @@ public class ControllerScript : MonoBehaviour
     public Material fetus_head_area;
     public AudioSource sound_effect;
     private bool push;
-    private List<int> path;
     private int modify_index;
     private Vector3[] original_pos;
     private Vector3[] original_normals;
@@ -33,14 +32,18 @@ public class ControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
         push = false;
         modify_index = -1;
-        path = new List<int>();
         help_text.text = "No detection";
         original_pos = belly.GetComponent<MeshFilter>().sharedMesh.vertices;
         original_normals = belly.GetComponent<MeshFilter>().sharedMesh.normals;
         inv_denominator = 1 / (2 * Mathf.PI * theta * theta);
         m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
+        sw.Stop();
+        System.TimeSpan ts = sw.Elapsed;
+        print("Initial time for gaussian method: " + ts.TotalMilliseconds);
     }
 
     // Update is called once per frame
@@ -72,6 +75,12 @@ public class ControllerScript : MonoBehaviour
         }
     }
 
+    void OnApplicationQuit()
+    {
+        belly.GetComponent<MeshFilter>().sharedMesh.vertices = original_pos;
+        belly.GetComponent<MeshFilter>().sharedMesh.RecalculateNormals();
+    }
+
     // Check the laser collision point with the belly mesh
     void CheckIntersection()
     {
@@ -98,7 +107,7 @@ public class ControllerScript : MonoBehaviour
                 {
                     help_text.text = "Not pushed";
                     modify_index = -1;
-                    
+
                     // change the line material
                     laser_line_renderer.sharedMaterial = surgeon_area;
                     if (sound_effect.isPlaying)
@@ -110,7 +119,7 @@ public class ControllerScript : MonoBehaviour
                     // disable the sound in Oculus Go
                     if (m_isOculusGo)
                     {
-                        
+
                         if (sound_effect.isPlaying)
                             sound_effect.Stop();
                     }
@@ -125,7 +134,7 @@ public class ControllerScript : MonoBehaviour
                     if (hit_vertex != modify_index)
                         ResetModel();
                     modify_index = hit_vertex;
-                    
+
                     // enable the vibration
                     OVRInput.SetControllerVibration(touch_vibration_freq, touch_vibration_freq, OVRInput.Controller.RTouch);
 
@@ -245,15 +254,17 @@ public class ControllerScript : MonoBehaviour
             return -1;
     }
 
-    float Gaussian_2d(float dx, float dy)
+    float Gaussian_2d(float dx, float dy, float dz)
     {
-        float e_term = Mathf.Exp(-(dx * dx + dy * dy) / (2 * theta * theta));
+        float e_term = Mathf.Exp(-(dx * dx + dy * dy + dz * dz) / (2 * theta * theta));
         float ret = inv_denominator * e_term;
         return ret;
     }
 
     void ModifyModel()
     {
+        System.Diagnostics.Stopwatch sw1 = new System.Diagnostics.Stopwatch();
+        sw1.Start();
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices = mesh_to_modify.vertices;
         Vector3[] normals = mesh_to_modify.normals;
@@ -272,7 +283,7 @@ public class ControllerScript : MonoBehaviour
             //print(distance);
             if (distance < affect_region && vertices[i].y > -0.06f)
             {
-                float z_gaussian = Gaussian_2d(dx * 10, dy * 10);
+                float z_gaussian = Gaussian_2d(dx, dy, dz);
                 change_vertices.Add(i, z_gaussian);
                 if (max_gaussian < z_gaussian)
                     max_gaussian = z_gaussian;
@@ -300,20 +311,12 @@ public class ControllerScript : MonoBehaviour
 
             if (fetus_status == 1 || fetus_status == 2)
             {
-                vertices[vertex.Key].x += 0.5f * push_delta_change.x;
-                vertices[vertex.Key].y += 0.5f * push_delta_change.y;
-                vertices[vertex.Key].z += 0.5f * push_delta_change.z;
-                if (fetus_status == 1) // head count++
-                    fetus_status_count[1]++;
-                else if (fetus_status == 2) // other count++
-                    fetus_status_count[2]++;
+                vertices[vertex.Key].x += 0.2f * push_delta_change.x;
+                vertices[vertex.Key].y += 0.2f * push_delta_change.y;
+                vertices[vertex.Key].z += 0.2f * push_delta_change.z;
             }
-            else
-            {
-                fetus_status_count[0]++; //nothing count++
-            }
-            
-            
+
+            fetus_status_count[fetus_status]++;
         }
 
         // calculate the ratio of fetus component in the pushed areas
@@ -352,6 +355,11 @@ public class ControllerScript : MonoBehaviour
         mesh_to_modify.vertices = vertices;
         mesh_to_modify.RecalculateNormals();
 
+        sw1.Stop();
+        System.TimeSpan ts1 = sw1.Elapsed;
+        print("Time for push some point: " + ts1.TotalMilliseconds);
+
+
         /*
          * DEBUG POSITION PRECISION
          *
@@ -370,10 +378,10 @@ public class ControllerScript : MonoBehaviour
         Ray ray = new Ray(pos, -norm); // norm dir
 
         // reference: https://answers.unity.com/questions/282165/raycastall-returning-results-in-reverse-order-of-c-1.html
-        RaycastHit[] hits = Physics.RaycastAll(ray, 15f).OrderBy(h => h.distance).ToArray();
-        
-        if (hits.Length > 0  && hits[0].collider.tag == "Head")
-        {           
+        RaycastHit[] hits = Physics.RaycastAll(ray, 1000f).OrderBy(h => h.distance).ToArray();
+
+        if (hits.Length > 0 && hits[0].collider.tag == "Head")
+        {
             if (hits[0].distance < 13f)
             {
                 return 1;
@@ -382,6 +390,7 @@ public class ControllerScript : MonoBehaviour
 
         if (hits.Length > 0 && hits[0].collider.tag == "Back")
         {
+            Debug.Log(hits[0].distance);
             if (hits[0].distance < 13f)
             {
                 return 2;
@@ -398,6 +407,3 @@ public class ControllerScript : MonoBehaviour
         mesh_to_modify.normals = original_normals;
     }
 }
-
-
-
