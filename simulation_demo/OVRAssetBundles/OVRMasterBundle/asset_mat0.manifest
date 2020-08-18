@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 205508486
+CRC: 4223828353
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 10ed3c620429d17309487e4985902f53
+    Hash: 58a8ad155f89392b6c9cb9a9abbaebb7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21c99c86a43ad817b2cb7f65458ae090
@@ -17,12 +17,14 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Oculus/SampleFramework/Usage/GuardianBoundarySystem/Materials/DebugDrawLine.mat
+- Assets/Models/Materials/silhouette_Lady_Silhouette1.mat
 - Assets/Oculus/SampleFramework/Core/Locomotion/Materials/TeleportLaser.mat
 - Assets/Models/Materials/phong1.mat
 - Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Materials/SkyboxForRealtime.mat
 - Assets/Oculus/VR/Materials/Arrow.mat
 - Assets/Models/Materials/hair_Material.mat
 - Assets/Oculus/VR/Materials/BasicHandMaterial.mat
+- Assets/Models/Materials/Lady_Material.mat
 Dependencies:
-- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_shader0
-- E:/academic/IC/DT/simulation_project/simulation_demo/cloned/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_png0
+- E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_png0
+- E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_shader0

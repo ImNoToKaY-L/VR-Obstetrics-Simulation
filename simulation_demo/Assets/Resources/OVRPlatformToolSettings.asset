@@ -84,6 +84,6 @@ MonoBehaviour:
   - configList: []
   - configList: []
   - configList: []
-  targetPlatform: 1
+  targetPlatform: 2
   runOvrLint: 1
   skipUnneededShaders: 1

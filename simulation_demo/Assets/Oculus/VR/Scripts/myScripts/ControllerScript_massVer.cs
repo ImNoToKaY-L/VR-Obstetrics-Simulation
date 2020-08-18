@@ -242,31 +242,44 @@ public class ControllerScript_massVer : MonoBehaviour
             return directions[3];
         else
             return Vector2.zero;
+
 #else
-        Vector2 coord = Vector2.zero;
+
         if (m_isOculusGo) // Oculus Go
         {
-            if(OVRInput.Get(OVRInput.Button.PrimaryTouchpad))
-                coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
-            else
-                return coord;
-        }
-            
-        else // Oculus Quest
-            coord = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+            Vector2 coord = Vector2.zero;
 
-        Vector2 best_match_dir = Vector2.zero;
-        float max = Mathf.NegativeInfinity;
-        foreach (Vector2 vec in directions)
-        {
-            float dot_result = Vector2.Dot(vec, coord);
-            if (dot_result > max)
+            // check input
+            if (!OVRInput.Get(OVRInput.Button.PrimaryTouchpad))
+                return coord;
+            
+            coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
+            Vector2 best_match_dir = Vector2.zero;
+            float max = Mathf.NegativeInfinity;
+            foreach (Vector2 vec in directions)
             {
-                best_match_dir = vec;
-                max = dot_result;
+                float dot_result = Vector2.Dot(vec, coord);
+                if (dot_result > max)
+                {
+                    best_match_dir = vec;
+                    max = dot_result;
+                }
             }
+            return best_match_dir;
         }
-        return best_match_dir;
+        else // Oculus Quest
+        {
+            if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickUp))
+                return directions[0];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickDown))
+                return directions[1];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickLeft))
+                return directions[2];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickRight))
+                return directions[3];
+            else
+                return Vector2.zero;
+        }
 #endif
     }
 
