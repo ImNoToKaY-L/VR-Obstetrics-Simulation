@@ -29,8 +29,6 @@ ScriptsOnlyBuild:
     Unity.XR.Management.dll:
     - UnityEngine.XR.Management.XRGeneralSettings
     - UnityEngine.XR.Management.XRManagerSettings
-    Unity.XR.Oculus.Editor.dll:
-    - Unity.XR.Oculus.Editor.OculusSettingsEditor
     Unity.XR.Oculus.dll:
     - Unity.XR.Oculus.OculusLoader
     - Unity.XR.Oculus.OculusSettings
@@ -88,57 +86,57 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11398}
     - Class: 114
-      Script: {instanceID: 11548}
+      Script: {instanceID: 11550}
     - Class: 114
-      Script: {instanceID: 11572}
+      Script: {instanceID: 11574}
     - Class: 114
-      Script: {instanceID: 11632}
+      Script: {instanceID: 11634}
     - Class: 114
-      Script: {instanceID: 11660}
+      Script: {instanceID: 11662}
     - Class: 114
-      Script: {instanceID: 11780}
+      Script: {instanceID: 11782}
     - Class: 114
-      Script: {instanceID: 11824}
+      Script: {instanceID: 11826}
     - Class: 114
-      Script: {instanceID: 12144}
+      Script: {instanceID: 12146}
     - Class: 114
-      Script: {instanceID: 12234}
+      Script: {instanceID: 12236}
     - Class: 114
-      Script: {instanceID: 12256}
+      Script: {instanceID: 12258}
     - Class: 114
-      Script: {instanceID: 12402}
+      Script: {instanceID: 12404}
     - Class: 114
-      Script: {instanceID: 12558}
+      Script: {instanceID: 12560}
     - Class: 114
-      Script: {instanceID: 12682}
+      Script: {instanceID: 12684}
     - Class: 114
-      Script: {instanceID: 12920}
+      Script: {instanceID: 12922}
     - Class: 114
-      Script: {instanceID: 13058}
+      Script: {instanceID: 13060}
     - Class: 114
-      Script: {instanceID: 13182}
+      Script: {instanceID: 13184}
     - Class: 114
-      Script: {instanceID: 13256}
+      Script: {instanceID: 13258}
     - Class: 114
-      Script: {instanceID: 13286}
+      Script: {instanceID: 13288}
     - Class: 114
-      Script: {instanceID: 13430}
+      Script: {instanceID: 13432}
     - Class: 114
-      Script: {instanceID: 13654}
+      Script: {instanceID: 13656}
     - Class: 114
-      Script: {instanceID: 13698}
-    - Class: 114
-      Script: {instanceID: 13774}
+      Script: {instanceID: 13700}
     - Class: 114
       Script: {instanceID: 13776}
     - Class: 114
-      Script: {instanceID: 14052}
+      Script: {instanceID: 13778}
     - Class: 114
-      Script: {instanceID: 14212}
+      Script: {instanceID: 14054}
     - Class: 114
-      Script: {instanceID: 14240}
+      Script: {instanceID: 14214}
     - Class: 114
-      Script: {instanceID: 14258}
+      Script: {instanceID: 14242}
+    - Class: 114
+      Script: {instanceID: 14260}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -262,6 +260,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_ScrollbarEventHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Oculus.VR.dll
+    namespaceName: 
+    className: HandedInputSelector
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -696,7 +700,7 @@ ScriptsOnlyBuild:
     className: AudioManager
   - hash:
       serializedVersion: 2
-      Hash: 7926bb52530b94965d6105ffce8c12b3
+      Hash: 4d6103c5dc1478efeebd0633338d4311
     assemblyName: Oculus.VR.dll
     namespaceName: 
     className: ControllerScript
@@ -1833,14 +1837,8 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Oculus.VR.dll
     namespaceName: 
-    className: HandedInputSelector
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Oculus.VR.dll
-    namespaceName: 
     className: enableComputerClicking
   platform: 13
   scenePathNames:
   - Assets/demo.unity
-  playerPath: E:/academic/IC/DT/demo_for_quest_0813.apk
+  playerPath: E:/academic/IC/DT/demo_for_quest_0818.apk

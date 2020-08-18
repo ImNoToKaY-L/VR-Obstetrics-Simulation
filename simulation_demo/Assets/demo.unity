@@ -886,6 +886,11 @@ PrefabInstance:
       propertyPath: usePerEyeCameras
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114814064252544740, guid: ce816f2e6abb0504092c23ed9b970dfd,
+        type: 3}
+      propertyPath: activateKeys.Array.data[0]
+      value: 113
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
 --- !u!20 &913833283 stripped
@@ -1609,6 +1614,7 @@ MonoBehaviour:
   non_surgeon_area: {fileID: 2100000, guid: 669025377795b574da66d9bb2472fcab, type: 2}
   fetus_head_area: {fileID: 2100000, guid: a379cec2ba497874788d17eb312c61be, type: 2}
   sound_effect: {fileID: 594693803}
+  uiStop: 0
   theta: 0.01
   max_dz: 0.01
   affect_region: 0.04

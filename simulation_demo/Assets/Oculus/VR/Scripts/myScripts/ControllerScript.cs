@@ -15,6 +15,7 @@ public class ControllerScript : MonoBehaviour
     public Material non_surgeon_area;
     public Material fetus_head_area;
     public AudioSource sound_effect;
+    public bool uiStop;
     private bool push;
     private int modify_index;
     private Vector3[] original_pos;
@@ -34,6 +35,7 @@ public class ControllerScript : MonoBehaviour
     {
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
+        uiStop = false;
         push = false;
         modify_index = -1;
         help_text.text = "No detection";
@@ -49,29 +51,22 @@ public class ControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-#if UNITY_EDITOR
-        if (Input.anyKey)
+        if (!uiStop)
         {
             Vector2 dir = GetDirection();
             ChangePosition(dir);
-        }
-#else
-        if (OVRInput.Get(OVRInput.Button.PrimaryTouchpad))
-        {
-            Vector2 dir = GetDirection();
-            ChangePosition(dir);
-        }
-#endif
-        CheckIntersection();
 
-        if (modify_index != -1)
-        {
-            ModifyModel();
-            modify_index = -1;
-        }
-        else
-        {
-            ResetModel();
+            CheckIntersection();
+
+            if (modify_index != -1)
+            {
+                ModifyModel();
+                modify_index = -1;
+            }
+            else
+            {
+                ResetModel();
+            }
         }
     }
 
@@ -94,7 +89,7 @@ public class ControllerScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
 #else
         // Oculus version
-        push = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger); // Get the current state of the trigger button
+        push = (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)); // Get the current state of the trigger button
         RaycastHit hit;
         transform.rotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote);
         if (Physics.Raycast(transform.position, transform.forward, out hit))
@@ -195,25 +190,44 @@ public class ControllerScript : MonoBehaviour
             return directions[3];
         else
             return Vector2.zero;
-#else
-        Vector2 coord = Vector2.zero;
-        if (m_isOculusGo) // Oculus Go
-            coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
-        else // Oculus Quest
-            coord = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
 
-        Vector2 best_match_dir = Vector2.zero;
-        float max = Mathf.NegativeInfinity;
-        foreach (Vector2 vec in directions)
+#else
+
+        if (m_isOculusGo) // Oculus Go
         {
-            float dot_result = Vector2.Dot(vec, coord);
-            if (dot_result > max)
+            Vector2 coord = Vector2.zero;
+
+            // check input
+            if (!OVRInput.Get(OVRInput.Button.PrimaryTouchpad))
+                return coord;
+            
+            coord = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad, OVRInput.Controller.RTrackedRemote);
+            Vector2 best_match_dir = Vector2.zero;
+            float max = Mathf.NegativeInfinity;
+            foreach (Vector2 vec in directions)
             {
-                best_match_dir = vec;
-                max = dot_result;
+                float dot_result = Vector2.Dot(vec, coord);
+                if (dot_result > max)
+                {
+                    best_match_dir = vec;
+                    max = dot_result;
+                }
             }
+            return best_match_dir;
         }
-        return best_match_dir;
+        else // Oculus Quest
+        {
+            if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickUp))
+                return directions[0];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickDown))
+                return directions[1];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickLeft))
+                return directions[2];
+            else if (OVRInput.Get(OVRInput.Button.SecondaryThumbstickRight))
+                return directions[3];
+            else
+                return Vector2.zero;
+        }
 #endif
     }
 
@@ -225,6 +239,26 @@ public class ControllerScript : MonoBehaviour
         float movementSpeed = 20f;
         transform.position = transform.position + new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0, verticalInput * movementSpeed * Time.deltaTime);
         cam.transform.position = cam.transform.position + new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0, verticalInput * movementSpeed * Time.deltaTime);
+        // get rotation
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.S))
+            cam.transform.rotation *= Quaternion.Euler(2f * Time.deltaTime, 0, 0);
+        else if (Input.GetKey(KeyCode.W))
+            cam.transform.rotation *= Quaternion.Euler(-2f * Time.deltaTime, 0, 0);
+        else if (Input.GetKey(KeyCode.E))
+            cam.transform.rotation *= Quaternion.Euler(0, 2f * Time.deltaTime, 0);
+        else if (Input.GetKey(KeyCode.Q))
+            cam.transform.rotation *= Quaternion.Euler(0, -2f * Time.deltaTime, 0);
+# else
+        if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
+            cam.transform.rotation *= Quaternion.Euler(-2f * Time.deltaTime, 0, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickDown))
+            cam.transform.rotation *= Quaternion.Euler(2f * Time.deltaTime, 0, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickLeft))
+            cam.transform.rotation *= Quaternion.Euler(0, -2f * Time.deltaTime, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickRight))
+            cam.transform.rotation *= Quaternion.Euler(0, 2f * Time.deltaTime, 0);
+#endif
         transform.rotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote);
         laser_line_renderer.SetPosition(1, transform.forward * 10000);
         laser_line_renderer.SetPosition(0, transform.position);
@@ -387,6 +421,7 @@ public class ControllerScript : MonoBehaviour
                 return 1;
             }
         }
+
 
         if (hits.Length > 0 && hits[0].collider.tag == "Back")
         {

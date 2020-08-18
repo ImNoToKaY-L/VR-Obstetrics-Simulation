@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-
 // Show off all the Debug UI components.
 public class DebugUISample : MonoBehaviour
 {
@@ -68,16 +67,18 @@ public class DebugUISample : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.Button.Two) || Input.GetKeyDown(KeyCode.A))
         {
             Debug.Log("Button received, inMenu = " + inMenu);
-            if (inMenu)
+            if (inMenu) // close the menu
             {
                 lr.enabled = true;
                 lp.GetComponent<LineRenderer>().enabled = false;
+                script.uiStop = false;
                 DebugUIBuilder.instance.Hide();
             }
-            else
+            else // show the menu
             {
                 lr.enabled = false;
                 lp.GetComponent<LineRenderer>().enabled = true;
+                script.uiStop = true;
                 DebugUIBuilder.instance.Show();
             }
             
