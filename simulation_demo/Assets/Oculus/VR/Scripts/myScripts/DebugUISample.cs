@@ -6,38 +6,44 @@ using UnityEngine.UI;
 // Show off all the Debug UI components.
 public class DebugUISample : MonoBehaviour
 {
-    bool inMenu;
-    private Text thetaValue;
-    private Text thetaLabel;
+    private bool inMenu;
+    private Text sigmaValue;
+    private Text sigmaLabel;
     private Text distanceValue;
     private Text distanceLabel;
     private int curFetusPos;
     private bool showHintText;
     private bool transparentMaterial;
+    private Material m_origin_fetus;
     public ControllerScript script;
     public GameObject fetus;
+    public GameObject controllerModel;
     public LineRenderer lr;
     public LaserPointer lp;
     public GameObject belly;
     public Canvas hintText;
     public Material ladySkin;
     public Material transparentSkin;
+    public bool buttonReceived;
 
 
     void Start ()
     {
+        // store origin material for ray reminder
+        m_origin_fetus = script.m_fetus_area;
+
         curFetusPos = 0;
         SetFetusPos(curFetusPos);
         DebugUIBuilder.instance.AddLabel("Gaussian parameters setting");
 
-        var thetaSlider = DebugUIBuilder.instance.AddSlider("Slider", 0.01f, 0.02f, ThetaSliderPressed, false);
-        var thetaTextElementsInSlider = thetaSlider.GetComponentsInChildren<Text>();
-        Assert.AreEqual(thetaTextElementsInSlider.Length, 2, "Slider prefab format requires 2 text components (label + value)");
-        thetaLabel = thetaTextElementsInSlider[0];
-        thetaLabel.text = "Theta";
-        thetaValue = thetaTextElementsInSlider[1];
-        Assert.IsNotNull(thetaValue, "No text component on slider prefab");
-        thetaValue.text = thetaSlider.GetComponentInChildren<Slider>().value.ToString();
+        var sigmaSlider = DebugUIBuilder.instance.AddSlider("Slider", 0.01f, 0.02f, SigmaSliderPressed, false);
+        var sigmaTextElementsInSlider = sigmaSlider.GetComponentsInChildren<Text>();
+        Assert.AreEqual(sigmaTextElementsInSlider.Length, 2, "Slider prefab format requires 2 text components (label + value)");
+        sigmaLabel = sigmaTextElementsInSlider[0];
+        sigmaLabel.text = "Sigma";
+        sigmaValue = sigmaTextElementsInSlider[1];
+        Assert.IsNotNull(sigmaValue, "No text component on slider prefab");
+        sigmaValue.text = sigmaSlider.GetComponentInChildren<Slider>().value.ToString();
 
         var distanceSlider = DebugUIBuilder.instance.AddSlider("Slider", 0.01f, 0.03f, DistanceSliderPressed, false);
         var distanceTextElementsInSlider = distanceSlider.GetComponentsInChildren<Text>();
@@ -56,35 +62,54 @@ public class DebugUISample : MonoBehaviour
         DebugUIBuilder.instance.AddLabel("Helpers");
         DebugUIBuilder.instance.AddToggle("Transparent", SetTransparent, false);
         DebugUIBuilder.instance.AddToggle("Show hint text", ShowHintText, true);
-        
+        DebugUIBuilder.instance.AddToggle("Ray colour reminder", RayColour, true);
+
+        DebugUIBuilder.instance.AddDivider();
+        DebugUIBuilder.instance.AddButton("Close this window", CloseMenu);
 
         //DebugUIBuilder.instance.Show();
         inMenu = false;
-	}
+        buttonReceived = false;
+
+    }
 
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.Two) || Input.GetKeyDown(KeyCode.A))
+        if (buttonReceived)
         {
             Debug.Log("Button received, inMenu = " + inMenu);
             if (inMenu) // close the menu
             {
-                lr.enabled = true;
-                lp.GetComponent<LineRenderer>().enabled = false;
-                script.uiStop = false;
-                DebugUIBuilder.instance.Hide();
+                CloseMenu();
             }
             else // show the menu
             {
-                lr.enabled = false;
-                lp.GetComponent<LineRenderer>().enabled = true;
-                script.uiStop = true;
-                DebugUIBuilder.instance.Show();
+                ShowMenu();
             }
             
-            inMenu = !inMenu;
+            buttonReceived = false;
             Debug.Log("After pressed button, inMenu = " + inMenu);
         }
+    }
+
+    void CloseMenu()
+    {
+        controllerModel.GetComponent<MeshRenderer>().enabled = true;
+        lr.enabled = true;
+        lp.GetComponent<LineRenderer>().enabled = false;
+        script.uiStop = false;
+        DebugUIBuilder.instance.Hide();
+        inMenu = false;
+    }
+
+    void ShowMenu()
+    {
+        controllerModel.GetComponent<MeshRenderer>().enabled = false;
+        lr.enabled = false;
+        lp.GetComponent<LineRenderer>().enabled = true;
+        script.uiStop = true;
+        DebugUIBuilder.instance.Show();
+        inMenu = true;
     }
 
     void ChangeFetusPos()
@@ -129,11 +154,11 @@ public class DebugUISample : MonoBehaviour
 
     }
 
-    public void ThetaSliderPressed(float f)
+    public void SigmaSliderPressed(float f)
     {
-        Debug.Log("theta slider: " + f);
-        thetaValue.text = f.ToString();
-        script.theta = f;
+        Debug.Log("sigma slider: " + f);
+        sigmaValue.text = f.ToString();
+        script.sigma = f;
     }
 
     public void DistanceSliderPressed(float f)
@@ -168,6 +193,19 @@ public class DebugUISample : MonoBehaviour
         {
              hintText.GetComponent<Canvas>().enabled = false;
              Debug.Log("Hint text hided");
+        }
+    }
+
+    public void RayColour(Toggle t)
+    {
+        if (t.isOn)
+        {
+            script.m_fetus_area = m_origin_fetus;
+        }
+        else
+        {
+            // cancel the reminder
+            script.m_fetus_area = script.m_surgeon_area;
         }
     }
 }

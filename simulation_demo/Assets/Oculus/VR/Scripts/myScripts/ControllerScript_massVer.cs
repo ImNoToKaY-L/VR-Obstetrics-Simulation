@@ -16,13 +16,13 @@ public class ControllerScript_massVer : MonoBehaviour
     public Material fetus_head_area;
     public AudioSource sound_effect;
     public float touch_vibration_freq;
+    public float press_distance;
     private Hashtable springs;
     private bool push;
     private int modify_index;
     private Vector3[] original_pos;
     private Vector3[] original_normals;
     private bool m_isOculusGo;
-    private float press_distance;
 
 
     // debug use!!
@@ -38,7 +38,7 @@ public class ControllerScript_massVer : MonoBehaviour
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
         push = false;
-        press_distance = 0.04f;
+        press_distance = 0.02f;
         touch_vibration_freq = 0.1f;
         springs = new Hashtable();
         modify_index = -1;
@@ -65,7 +65,7 @@ public class ControllerScript_massVer : MonoBehaviour
         {
             foreach(spring spr in springs.Values)
             {
-                spr.reset_koks(ko, ks);
+                spr.resetKoKs(ko, ks);
                 last_ko = ko;
                 last_ks = ks;
             }
@@ -78,9 +78,9 @@ public class ControllerScript_massVer : MonoBehaviour
         // check mouse or pointer position
         CheckIntersection();
 
-        if (modify_index != -1)
+        if (push)
         {
-            ((spring)springs[modify_index]).curposi = 1;
+            ((spring)springs[modify_index]).cur_pos_ratio = 1;
         }
 
         // TODO RESET
@@ -103,16 +103,12 @@ public class ControllerScript_massVer : MonoBehaviour
         for (int i = 0; i < vertices.Length; i++)
         {
             Vector3 vertex = vertices[i];
-            Vector3 normal = mesh.normals[i];
             spring spr = new spring();
 
             // get the position info from the vertex
-            float[] posarr = new float[6];
-            posarr[0] = vertex.x; posarr[3] = vertex.x - normal.x * press_distance;
-            posarr[1] = vertex.y; posarr[4] = vertex.y - normal.y * press_distance;
-            posarr[2] = vertex.z; posarr[5] = vertex.z - normal.z * press_distance;
-            spr.setid(i);
-            spr.setposi(posarr);
+            spr.setDistance(press_distance);
+            spr.setID(i);
+            spr.setOriPos(vertex);
             springs.Add(i, spr);
         }
 
@@ -122,9 +118,9 @@ public class ControllerScript_massVer : MonoBehaviour
             int ver1 = triangles[index];
             int ver2 = triangles[index + 1];
             int ver3 = triangles[index + 2];
-            ((spring)springs[ver1]).setneighbourhood(ver2); ((spring)springs[ver1]).setneighbourhood(ver3);
-            ((spring)springs[ver2]).setneighbourhood(ver1); ((spring)springs[ver2]).setneighbourhood(ver3);
-            ((spring)springs[ver3]).setneighbourhood(ver2); ((spring)springs[ver3]).setneighbourhood(ver1);
+            ((spring)springs[ver1]).addNeighbour(ver2); ((spring)springs[ver1]).addNeighbour(ver3);
+            ((spring)springs[ver2]).addNeighbour(ver1); ((spring)springs[ver2]).addNeighbour(ver3);
+            ((spring)springs[ver3]).addNeighbour(ver2); ((spring)springs[ver3]).addNeighbour(ver1);
         }
     }
 
@@ -153,7 +149,6 @@ public class ControllerScript_massVer : MonoBehaviour
                 if (!push) // not triggered
                 {
                     help_text.text = "Not pushed";
-                    modify_index = -1;
                     
                     // change the line material
                     laser_line_renderer.sharedMaterial = surgeon_area;
@@ -327,31 +322,39 @@ public class ControllerScript_massVer : MonoBehaviour
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices = mesh_to_modify.vertices;
         int[] fetus_status_count = { 0, 0, 0 };
-        foreach (spring spr in springs.Values)
+        Vector3 dir = transform.forward;
+        if (modify_index != -1)
         {
-            spr.posifixing(springs);
-            float[] pos = spring.calcposi(spr.getposi());
-            Vector3 vec = new Vector3(pos[0], pos[1], pos[2]);
-            Vector3 ori_vec = vertices[spr.id];
-            Vector3 norm = original_normals[spr.id];
-            if (modify_index != -1 && (pos[0] != ori_vec.x || pos[1] != ori_vec.y || pos[2] != ori_vec.z)) // pushed, check fetus position
+            foreach (spring spr in springs.Values)
             {
-                Vector3 push_point = belly.transform.TransformPoint(vec); // to world position
-                int fetus_status = CheckFetusPos(push_point, -transform.forward);
-                if (fetus_status == 1 || fetus_status == 2)
+                Vector3 ori_vec = vertices[spr.id];
+                float distance_to_centre = Mathf.Pow(ori_vec.x - vertices[modify_index].x, 2) +
+                                            Mathf.Pow(ori_vec.y - vertices[modify_index].y, 2) +
+                                            Mathf.Pow(ori_vec.z - vertices[modify_index].z, 2);
+                distance_to_centre = Mathf.Sqrt(distance_to_centre);
+                if (distance_to_centre < 0.04f)
                 {
-                    vec = new Vector3((vec.x + ori_vec.x) * 0.5f, (vec.y + ori_vec.y) * 0.5f, (vec.z + ori_vec.z) * 0.5f);
-                }
-                fetus_status_count[fetus_status]++;
-            }
-            
-            vertices[spr.id] = vec;
-        }
-        if (modify_index != -1) // pushed, check fetus component info
-        {
-            // calculate the ratio of fetus component in the pushed areas
-            float ratio = (float)(fetus_status_count[1] + fetus_status_count[2]) / (float)fetus_status_count.Sum();
+                    spr.posifixing(springs, dir);
+                    Vector3 vec = spr.calcposi(dir);
+                    if (push && (vec.x != ori_vec.x || vec.y != ori_vec.y || vec.z != ori_vec.z)) // pushed, check fetus position
+                    {
+                        Vector3 push_point = belly.transform.TransformPoint(vec); // to world position
+                        int fetus_status = CheckFetusPos(push_point, dir);
+                        if (fetus_status == 1 || fetus_status == 2)
+                        {
+                            vec = new Vector3((vec.x + ori_vec.x) * 0.5f, (vec.y + ori_vec.y) * 0.5f, (vec.z + ori_vec.z) * 0.5f);
+                        }
+                        fetus_status_count[fetus_status]++;
+                    }
 
+                    vertices[spr.id] = vec;
+                }
+
+            }
+        }
+        
+        if (push) // pushed, check fetus component info
+        {
             // change the material according to the max region
             if (fetus_status_count.Max() == fetus_status_count[0])
             {
@@ -368,6 +371,9 @@ public class ControllerScript_massVer : MonoBehaviour
                 help_text.text = "Something is here";
                 laser_line_renderer.sharedMaterial = fetus_head_area;
             }
+
+            // calculate the ratio of fetus component in the pushed areas
+            float ratio = (float)(fetus_status_count[1] + fetus_status_count[2]) / (float)fetus_status_count.Sum();
 
             // enable the vibration
             float freq = touch_vibration_freq + (1f - touch_vibration_freq) * ratio;
@@ -387,36 +393,31 @@ public class ControllerScript_massVer : MonoBehaviour
 
         sw1.Stop();
         System.TimeSpan ts1 = sw1.Elapsed;
-        if (modify_index != -1)
-            print("Time for push some point: " + ts1.TotalMilliseconds);
+        //if (push)
+            //print("Time for push some point: " + ts1.TotalMilliseconds);
 
     }
 
-    int CheckFetusPos(Vector3 pos, Vector3 norm)
+    int CheckFetusPos(Vector3 pos, Vector3 dir)
     {
         //  Ray ray = new Ray(pos, new Vector3(0f, -1f, 0f)); // vertical dir
-        Ray ray = new Ray(pos, -norm); // norm dir
+        Ray ray = new Ray(pos, dir); // norm dir
 
-        // reference: https://answers.unity.com/questions/282165/raycastall-returning-results-in-reverse-order-of-c-1.html
-        RaycastHit[] hits = Physics.RaycastAll(ray, 15f).OrderBy(h => h.distance).ToArray();
-        
-        if (hits.Length > 0  && hits[0].collider.tag == "Head")
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 13f))
         {
-            if (hits[0].distance < 13f)
+            if (hit.collider.tag == "Head")
             {
                 return 1;
             }
-        }
-
-        if (hits.Length > 0 && hits[0].collider.tag == "Back")
-        {
-            if (hits[0].distance < 13f)
+            else
             {
                 return 2;
             }
         }
-
-        return 0;
+        else
+            return 0;
     }
 
     void ResetModel()

@@ -1,27 +1,15 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - HandedInputSelector
     - ONSPSettings
     Oculus.Platform.dll:
     - Oculus.Platform.PlatformSettings
     Oculus.VR.Editor.dll:
     - Assets.Oculus.VR.Editor.OVRPlatformToolSettings
+    - OVRBundleTool
     - OVRConfig
     Oculus.VR.dll:
-    - ControllerScript
-    - DebugUIBuilder
-    - DebugUISample
-    - LaserPointer
-    - OVRCameraRig
-    - OVRDebugInfo
-    - OVRHeadsetEmulator
-    - OVRManager
-    - OVRPlayerController
-    - OVRRaycaster
-    - OVRSceneSampleController
-    - OVRScreenFade
-    - UnityEngine.EventSystems.OVRInputModule
+    - OVRSceneLoader
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.XR.Management.Editor.dll:
@@ -38,6 +26,7 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
@@ -48,7 +37,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Text
     - UnityEngine.UI.Toggle
   sceneClasses:
-    Assets/demo.unity:
+    E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/Assets/Oculus/VR/Editor/Scenes/OVRTransitionScene.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -57,23 +46,11 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
-    - Class: 23
-      Script: {instanceID: 0}
     - Class: 28
-      Script: {instanceID: 0}
-    - Class: 33
-      Script: {instanceID: 0}
-    - Class: 43
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 64
-      Script: {instanceID: 0}
     - Class: 81
-      Script: {instanceID: 0}
-    - Class: 82
-      Script: {instanceID: 0}
-    - Class: 83
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -82,68 +59,30 @@ ScriptsOnlyBuild:
     - Class: 109
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11318}
+      Script: {instanceID: 11320}
     - Class: 114
-      Script: {instanceID: 11398}
+      Script: {instanceID: 11576}
     - Class: 114
-      Script: {instanceID: 11550}
+      Script: {instanceID: 11636}
     - Class: 114
-      Script: {instanceID: 11574}
+      Script: {instanceID: 12148}
     - Class: 114
-      Script: {instanceID: 11634}
+      Script: {instanceID: 12260}
     - Class: 114
-      Script: {instanceID: 11662}
+      Script: {instanceID: 12778}
     - Class: 114
-      Script: {instanceID: 11782}
+      Script: {instanceID: 13186}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 13658}
     - Class: 114
-      Script: {instanceID: 12146}
-    - Class: 114
-      Script: {instanceID: 12236}
-    - Class: 114
-      Script: {instanceID: 12258}
-    - Class: 114
-      Script: {instanceID: 12404}
-    - Class: 114
-      Script: {instanceID: 12560}
-    - Class: 114
-      Script: {instanceID: 12684}
-    - Class: 114
-      Script: {instanceID: 12922}
-    - Class: 114
-      Script: {instanceID: 13060}
-    - Class: 114
-      Script: {instanceID: 13184}
-    - Class: 114
-      Script: {instanceID: 13258}
-    - Class: 114
-      Script: {instanceID: 13288}
-    - Class: 114
-      Script: {instanceID: 13432}
-    - Class: 114
-      Script: {instanceID: 13656}
-    - Class: 114
-      Script: {instanceID: 13700}
-    - Class: 114
-      Script: {instanceID: 13776}
+      Script: {instanceID: 13702}
     - Class: 114
       Script: {instanceID: 13778}
     - Class: 114
-      Script: {instanceID: 14054}
-    - Class: 114
-      Script: {instanceID: 14214}
-    - Class: 114
-      Script: {instanceID: 14242}
-    - Class: 114
-      Script: {instanceID: 14260}
+      Script: {instanceID: 14200}
     - Class: 115
       Script: {instanceID: 0}
-    - Class: 120
-      Script: {instanceID: 0}
     - Class: 128
-      Script: {instanceID: 0}
-    - Class: 143
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -156,12 +95,6 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
-      Script: {instanceID: 0}
-    - Class: 241
-      Script: {instanceID: 0}
-    - Class: 243
-      Script: {instanceID: 0}
-    - Class: 245
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -448,7 +381,7 @@ ScriptsOnlyBuild:
     className: GridLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: 0f0ff514663f1c2d656c497340d162df
+      Hash: d872b8dcffaaf9555def49fee3b9d317
     assemblyName: Oculus.VR.dll
     namespaceName: 
     className: ControllerScript_massVer
@@ -700,7 +633,7 @@ ScriptsOnlyBuild:
     className: AudioManager
   - hash:
       serializedVersion: 2
-      Hash: 4d6103c5dc1478efeebd0633338d4311
+      Hash: 9d6ee1b50b960f9f7759aa4add68d30c
     assemblyName: Oculus.VR.dll
     namespaceName: 
     className: ControllerScript
@@ -1810,7 +1743,7 @@ ScriptsOnlyBuild:
     className: OVRLipSyncContextTextureFlip
   - hash:
       serializedVersion: 2
-      Hash: 7ee712d52770c5faed1c33823a51c17e
+      Hash: 2be22a5e6c0fef9a799dceff094c7f0c
     assemblyName: Oculus.VR.dll
     namespaceName: 
     className: DebugUISample
@@ -1840,5 +1773,5 @@ ScriptsOnlyBuild:
     className: enableComputerClicking
   platform: 13
   scenePathNames:
-  - Assets/demo.unity
-  playerPath: E:/academic/IC/DT/demo_for_quest_0818.apk
+  - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/Assets/Oculus/VR/Editor/Scenes/OVRTransitionScene.unity
+  playerPath: E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRTransition.apk

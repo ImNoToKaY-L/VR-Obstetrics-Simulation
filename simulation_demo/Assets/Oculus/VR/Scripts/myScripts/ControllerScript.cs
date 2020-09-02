@@ -11,11 +11,12 @@ public class ControllerScript : MonoBehaviour
     public OVRPlayerController cam;
     public GameObject belly;
     public GameObject fetus_head;
-    public Material surgeon_area;
-    public Material non_surgeon_area;
-    public Material fetus_head_area;
+    public Material m_surgeon_area;
+    public Material m_non_surgeon_area;
+    public Material m_fetus_area;
     public AudioSource sound_effect;
     public bool uiStop;
+    public DebugUISample uiScript;
     private bool push;
     private int modify_index;
     private Vector3[] original_pos;
@@ -24,8 +25,8 @@ public class ControllerScript : MonoBehaviour
 
 
     // Gaussian
-    float inv_denominator;
-    public float theta = 0.5f;
+    float gaussian_amplitude;
+    public float sigma = 0.5f;
     public float max_dz = 0.02f;
     public float affect_region = 0.04f;
     public float touch_vibration_freq = 0.1f;
@@ -41,7 +42,8 @@ public class ControllerScript : MonoBehaviour
         help_text.text = "No detection";
         original_pos = belly.GetComponent<MeshFilter>().sharedMesh.vertices;
         original_normals = belly.GetComponent<MeshFilter>().sharedMesh.normals;
-        inv_denominator = 1 / (2 * Mathf.PI * theta * theta);
+        // range_factor = 1 / (2 * Mathf.PI * theta * theta); 
+        gaussian_amplitude = 0.000000000000000000000001f; // This will not influence the result
         m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
         sw.Stop();
         System.TimeSpan ts = sw.Elapsed;
@@ -51,6 +53,14 @@ public class ControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // call out the ui screen
+        if (OVRInput.Get(OVRInput.Button.Two) || OVRInput.Get(OVRInput.Button.Back) || Input.GetKeyDown(KeyCode.A))
+        {
+            uiStop = !uiStop;
+            uiScript.buttonReceived = true;
+        }
+
+        // update the scene if no ui is shown
         if (!uiStop)
         {
             Vector2 dir = GetDirection();
@@ -104,7 +114,7 @@ public class ControllerScript : MonoBehaviour
                     modify_index = -1;
 
                     // change the line material
-                    laser_line_renderer.sharedMaterial = surgeon_area;
+                    laser_line_renderer.sharedMaterial = m_surgeon_area;
                     if (sound_effect.isPlaying)
                         sound_effect.Stop();
 
@@ -151,7 +161,7 @@ public class ControllerScript : MonoBehaviour
         {
             help_text.text = "No intersection";
             laser_line_renderer.SetPosition(1, transform.forward * 10000);
-            laser_line_renderer.sharedMaterial = non_surgeon_area;
+            laser_line_renderer.sharedMaterial = m_non_surgeon_area;
 
             // disable the vibration
             OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
@@ -162,6 +172,16 @@ public class ControllerScript : MonoBehaviour
 
                 if (sound_effect.isPlaying)
                     sound_effect.Stop();
+            }
+
+            // add another function to call out the ui
+            // to solve the problem of Oculus Go 'back' button)
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) 
+                || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)
+                || Input.GetMouseButtonDown(0))
+            {
+                uiStop = !uiStop;
+                uiScript.buttonReceived = true;
             }
         }
         laser_line_renderer.SetPosition(0, transform.position);
@@ -288,10 +308,10 @@ public class ControllerScript : MonoBehaviour
             return -1;
     }
 
-    float Gaussian_2d(float dx, float dy, float dz)
+    float Gaussian_function(float dx, float dy, float dz)
     {
-        float e_term = Mathf.Exp(-(dx * dx + dy * dy + dz * dz) / (2 * theta * theta));
-        float ret = inv_denominator * e_term;
+        float e_term = Mathf.Exp(-(dx * dx + dy * dy + dz * dz) / (2 * sigma * sigma));
+        float ret = gaussian_amplitude * e_term;
         return ret;
     }
 
@@ -315,9 +335,9 @@ public class ControllerScript : MonoBehaviour
             float dz = vertices[i].z - centre_point.z;
             float distance = Mathf.Sqrt(dx * dx + dy * dy + dz * dz);
             //print(distance);
-            if (distance < affect_region && vertices[i].y > -0.06f)
+            if (distance < affect_region)
             {
-                float z_gaussian = Gaussian_2d(dx, dy, dz);
+                float z_gaussian = Gaussian_function(dx, dy, dz);
                 change_vertices.Add(i, z_gaussian);
                 if (max_gaussian < z_gaussian)
                     max_gaussian = z_gaussian;
@@ -329,11 +349,11 @@ public class ControllerScript : MonoBehaviour
         // calculate ratio and interpolate between 0 and max dz
         change_vertices = change_vertices.ToDictionary(x => x.Key, x => (x.Value - min_gaussian) / (max_gaussian - min_gaussian));
         int[] fetus_status_count = { 0, 0, 0 };
+        Vector3 push_point_dir = -transform.forward;
         foreach (var vertex in change_vertices)
         {
             // use push direction and factor to calculate the change 
             float push_delta_factor = Mathf.Lerp(0, max_dz, vertex.Value);
-            Vector3 push_point_dir = -transform.forward;
             Vector3 push_delta_change = new Vector3(push_point_dir.x * push_delta_factor, push_point_dir.y * push_delta_factor, push_point_dir.z * push_delta_factor);
 
             vertices[vertex.Key].x -= push_delta_change.x;
@@ -353,25 +373,25 @@ public class ControllerScript : MonoBehaviour
             fetus_status_count[fetus_status]++;
         }
 
-        // calculate the ratio of fetus component in the pushed areas
-        float ratio = (float)(fetus_status_count[1] + fetus_status_count[2]) / (float)fetus_status_count.Sum();
-
         // change the material according to the max region
         if (fetus_status_count.Max() == fetus_status_count[0])
         {
             help_text.text = "Not touched anything";
-            laser_line_renderer.sharedMaterial = surgeon_area;
+            laser_line_renderer.sharedMaterial = m_surgeon_area;
         }
         else if (fetus_status_count.Max() == fetus_status_count[1])
         {
             help_text.text = "Head is here";
-            laser_line_renderer.sharedMaterial = fetus_head_area;
+            laser_line_renderer.sharedMaterial = m_fetus_area;
         }
         else
         {
             help_text.text = "Something is here";
-            laser_line_renderer.sharedMaterial = fetus_head_area;
+            laser_line_renderer.sharedMaterial = m_fetus_area;
         }
+
+        // calculate the ratio of fetus component in the pushed areas
+        float ratio = (float)(fetus_status_count[1] + fetus_status_count[2]) / (float)fetus_status_count.Sum();
 
         // enable the vibration
         float freq = touch_vibration_freq + (1f - touch_vibration_freq) * ratio;
@@ -408,31 +428,21 @@ public class ControllerScript : MonoBehaviour
 
     int CheckFetusPos(Vector3 pos, Vector3 norm)
     {
-        //  Ray ray = new Ray(pos, new Vector3(0f, -1f, 0f)); // vertical dir
         Ray ray = new Ray(pos, -norm); // norm dir
 
-        // reference: https://answers.unity.com/questions/282165/raycastall-returning-results-in-reverse-order-of-c-1.html
-        RaycastHit[] hits = Physics.RaycastAll(ray, 1000f).OrderBy(h => h.distance).ToArray();
-
-        if (hits.Length > 0 && hits[0].collider.tag == "Head")
+        
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 13f))
         {
-            if (hits[0].distance < 13f)
+            if (hit.collider.tag == "Head")
             {
                 return 1;
             }
-        }
-
-
-        if (hits.Length > 0 && hits[0].collider.tag == "Back")
-        {
-            Debug.Log(hits[0].distance);
-            if (hits[0].distance < 13f)
-            {
+            else
                 return 2;
-            }
         }
-
-        return 0;
+        else
+            return 0;
     }
 
     void ResetModel()
