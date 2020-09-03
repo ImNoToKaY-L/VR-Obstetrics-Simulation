@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_app_icon.png.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\src\\main\\res\\mipmap-mdpi\\app_icon.png"
+    },
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_app_icon.xml.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\src\\main\\res\\mipmap-anydpi-v26\\app_icon.xml"
+    },
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_app_icon_round.xml.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\src\\main\\res\\mipmap-anydpi-v26\\app_icon_round.xml"
+    },
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_background.png.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\src\\main\\res\\mipmap-mdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\src\\main\\res\\mipmap-mdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\res\\merged\\debug\\xml_network_sec_config.xml.flat",
+        "source": "E:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\unityLibrary\\build\\intermediates\\packaged_res\\debug\\xml\\network_sec_config.xml"
+    }
+]

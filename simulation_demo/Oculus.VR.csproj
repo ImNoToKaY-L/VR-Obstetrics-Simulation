@@ -130,6 +130,7 @@
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\ControllerScript_massVer.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\DebugUIBuilder.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\DebugUISample.cs" />
+    <Compile Include="Assets\Oculus\VR\Scripts\myScripts\DebugUISampleMassVer.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\HandedInputSelector.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\LaserPointer.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\myScripts\MassSpringScript.cs" />

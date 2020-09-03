@@ -1,20 +1,21 @@
 ManifestFileVersion: 0
-CRC: 3333378503
+CRC: 322252520
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: asset_resources
       Dependencies: {}
     Info_1:
-      Name: scene_demo
+      Name: scene_demo_massspring
       Dependencies:
         Dependency_0: asset_mat0
-        Dependency_1: asset_3ds0
-        Dependency_2: asset_prefab0
-        Dependency_3: asset_fbx0
-        Dependency_4: asset_mb0
-        Dependency_5: asset_mixer0
-        Dependency_6: asset_wav0
+        Dependency_1: asset_png0
+        Dependency_2: asset_fbx0
+        Dependency_3: asset_3ds0
+        Dependency_4: asset_prefab0
+        Dependency_5: asset_mb0
+        Dependency_6: asset_mixer0
+        Dependency_7: asset_wav0
     Info_2:
       Name: asset_jpg0
       Dependencies: {}
@@ -26,20 +27,20 @@ AssetBundleManifest:
       Name: asset_png0
       Dependencies: {}
     Info_5:
+      Name: asset_fbx0
+      Dependencies:
+        Dependency_0: asset_jpg0
+    Info_6:
       Name: asset_3ds0
       Dependencies: {}
-    Info_6:
+    Info_7:
       Name: asset_ttf0
       Dependencies: {}
-    Info_7:
+    Info_8:
       Name: asset_prefab0
       Dependencies:
         Dependency_0: asset_png0
         Dependency_1: asset_ttf0
-    Info_8:
-      Name: asset_fbx0
-      Dependencies:
-        Dependency_0: asset_jpg0
     Info_9:
       Name: asset_mb0
       Dependencies:

@@ -67,9 +67,9 @@ class Spring
     }
     public Vector3 GetPosition(Vector3 dir)
     {
-        Vector3 cur_pos = new Vector3(ori_pos.x + dir.x * push_distance * cur_pos_ratio,
-                                    ori_pos.y + dir.y * push_distance * cur_pos_ratio,
-                                    ori_pos.z + dir.z * push_distance * cur_pos_ratio);
+        Vector3 cur_pos = new Vector3(ori_pos.x - dir.x * push_distance * cur_pos_ratio,
+                                    ori_pos.y - dir.y * push_distance * cur_pos_ratio,
+                                    ori_pos.z - dir.z * push_distance * cur_pos_ratio);
         return cur_pos;
     }
 

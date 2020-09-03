@@ -8,13 +8,15 @@ public class ControllerScript_massVer : MonoBehaviour
 {
     public Text help_text;
     public LineRenderer laser_line_renderer;
-    public OVRPlayerController cam;
+    public OVRCameraRig cam;
     public GameObject belly;
     public GameObject fetus_head;
-    public Material surgeon_area;
-    public Material non_surgeon_area;
-    public Material fetus_head_area;
+    public Material m_surgeon_area;
+    public Material m_non_surgeon_area;
+    public Material m_fetus_area;
     public AudioSource sound_effect;
+    public bool uiStop;
+    public DebugUISampleMassVer uiScript;
     public float touch_vibration_freq;
     private Spring[] springs;
     private bool push;
@@ -38,6 +40,7 @@ public class ControllerScript_massVer : MonoBehaviour
     {
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
+        uiStop = false;
         push = false;
         press_distance = 0.02f;
         touch_vibration_freq = 0.1f;
@@ -48,8 +51,6 @@ public class ControllerScript_massVer : MonoBehaviour
         m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
         springs = new Spring[original_pos.Length];
         InitSprings();
-
-        // vars for changing param
         last_kh = Spring.kh;
         last_kn = Spring.kn;
         kh = last_kh;
@@ -62,32 +63,55 @@ public class ControllerScript_massVer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(last_kh != kh || last_kn != kn || last_dis != press_distance)
+
+        // call out the ui screen
+        if (OVRInput.Get(OVRInput.Button.Two) || OVRInput.Get(OVRInput.Button.Back) || Input.GetKeyDown(KeyCode.A))
         {
-            Spring.kh = kh;
-            Spring.kn = kn;
-            Spring.push_distance = press_distance;
-            last_kh = kh;
-            last_kn = kn;
-            last_dis = press_distance;
+            uiStop = !uiStop;
+            uiScript.buttonReceived = true;
         }
 
-        // update direction 
-        Vector2 dir = GetDirection();
-        MoveToDir(dir);
-
-        // check mouse or pointer position
-        CheckIntersection();
-
-        if (push)
+        // check to change the param when ui is on
+        if  (uiStop)
         {
-            (springs[modify_index]).SetCurPosRatio(1f);
+            // Reset the model at UI interface
+            ResetModel();
+            
+            if (last_kh != kh)
+            {
+                Spring.kh = kh;
+                last_kh = kh;
+            }
+
+            if (last_kn != kn)
+            {
+                Spring.kn = kn;
+                last_kn = kn;
+            }
+
+            if (last_dis != press_distance)
+            {
+                Spring.push_distance = press_distance;
+                last_dis = press_distance;
+            }
         }
+        else
+        {
+            // update direction 
+            Vector2 dir = GetDirection();
+            ChangePosition(dir);
 
-        // TODO RESET
+            // check mouse or pointer position
+            CheckIntersection();
 
-        // update position
-        ModifyModel();
+            if (push && modify_index != -1)
+            {
+                (springs[modify_index]).SetCurPosRatio(1f);
+            }
+
+            // update position
+            ModifyModel();
+        }
     }
 
     void OnApplicationQuit()
@@ -172,9 +196,9 @@ public class ControllerScript_massVer : MonoBehaviour
                 if (!push) // not triggered
                 {
                     help_text.text = "Not pushed";
-                    
+
                     // change the line material
-                    laser_line_renderer.sharedMaterial = surgeon_area;
+                    laser_line_renderer.sharedMaterial = m_surgeon_area;
                     if (sound_effect.isPlaying)
                         sound_effect.Stop();
 
@@ -194,8 +218,6 @@ public class ControllerScript_massVer : MonoBehaviour
                     // find the push vertex
                     int hit_vertex = findClosestVertex(hit);
                     help_text.text = "Pushed";
-
-                    // avoid continuous push action
 
                     modify_index = hit_vertex;
                     
@@ -220,7 +242,7 @@ public class ControllerScript_massVer : MonoBehaviour
         {
             help_text.text = "No intersection";
             laser_line_renderer.SetPosition(1, transform.forward * 10000);
-            laser_line_renderer.sharedMaterial = non_surgeon_area;
+            laser_line_renderer.sharedMaterial = m_non_surgeon_area;
 
             // disable the vibration
             OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
@@ -231,6 +253,16 @@ public class ControllerScript_massVer : MonoBehaviour
 
                 if (sound_effect.isPlaying)
                     sound_effect.Stop();
+            }
+
+            // add another function to call out the ui
+            // to solve the problem of Oculus Go 'back' button)
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)
+                || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)
+                || Input.GetMouseButtonDown(0))
+            {
+                uiStop = !uiStop;
+                uiScript.buttonReceived = true;
             }
         }
         laser_line_renderer.SetPosition(0, transform.position);
@@ -301,13 +333,33 @@ public class ControllerScript_massVer : MonoBehaviour
     }
 
     // move the user and camera
-    void MoveToDir(Vector2 dir)
+    void ChangePosition(Vector2 dir)
     {
         float horizontalInput = dir.x;
         float verticalInput = dir.y;
         float movementSpeed = 20f;
         transform.position = transform.position + new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0, verticalInput * movementSpeed * Time.deltaTime);
         cam.transform.position = cam.transform.position + new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0, verticalInput * movementSpeed * Time.deltaTime);
+        // get rotation
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.S))
+            cam.transform.rotation *= Quaternion.Euler(2f * Time.deltaTime, 0, 0);
+        else if (Input.GetKey(KeyCode.W))
+            cam.transform.rotation *= Quaternion.Euler(-2f * Time.deltaTime, 0, 0);
+        else if (Input.GetKey(KeyCode.E))
+            cam.transform.rotation *= Quaternion.Euler(0, 2f * Time.deltaTime, 0);
+        else if (Input.GetKey(KeyCode.Q))
+            cam.transform.rotation *= Quaternion.Euler(0, -2f * Time.deltaTime, 0);
+# else
+        if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickUp))
+            cam.transform.rotation *= Quaternion.Euler(-2f * Time.deltaTime, 0, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickDown))
+            cam.transform.rotation *= Quaternion.Euler(2f * Time.deltaTime, 0, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickLeft))
+            cam.transform.rotation *= Quaternion.Euler(0, -2f * Time.deltaTime, 0);
+        else if (OVRInput.Get(OVRInput.Button.PrimaryThumbstickRight))
+            cam.transform.rotation *= Quaternion.Euler(0, 2f * Time.deltaTime, 0);
+#endif
         transform.rotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote);
         laser_line_renderer.SetPosition(1, transform.forward * 10000);
         laser_line_renderer.SetPosition(0, transform.position);
@@ -331,8 +383,6 @@ public class ControllerScript_massVer : MonoBehaviour
         }
         if (hit.collider.gameObject.GetComponent<MeshFilter>())
             return hit.collider.gameObject.GetComponent<MeshFilter>().sharedMesh.triangles[hit.triangleIndex * 3 + max_index];
-        else if (hit.collider.gameObject.GetComponent<SkinnedMeshRenderer>())
-            return hit.collider.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh.triangles[hit.triangleIndex * 3 + max_index];
         else // error: no renderer
             return -1;
     }
@@ -344,7 +394,7 @@ public class ControllerScript_massVer : MonoBehaviour
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices = mesh_to_modify.vertices;
         int[] fetus_status_count = { 0, 0, 0 };
-        Vector3 push_point_dir = belly.transform.InverseTransformDirection(transform.forward);
+        Vector3 push_point_dir = belly.transform.InverseTransformDirection(-transform.forward);
         if (modify_index != -1)
         {
             foreach (Spring spr in springs)
@@ -368,23 +418,23 @@ public class ControllerScript_massVer : MonoBehaviour
             }
         }
         
-        if (push) // pushed, check fetus component info
+        if (push && help_text.text != "No intersection") // pushed, check fetus component info
         {
             // change the material according to the max region
             if (fetus_status_count.Max() == fetus_status_count[0])
             {
                 help_text.text = "Not touched anything";
-                laser_line_renderer.sharedMaterial = surgeon_area;
+                laser_line_renderer.sharedMaterial = m_surgeon_area;
             }
             else if (fetus_status_count.Max() == fetus_status_count[1])
             {
                 help_text.text = "Head is here";
-                laser_line_renderer.sharedMaterial = fetus_head_area;
+                laser_line_renderer.sharedMaterial = m_fetus_area;
             }
             else
             {
                 help_text.text = "Something is here";
-                laser_line_renderer.sharedMaterial = fetus_head_area;
+                laser_line_renderer.sharedMaterial = m_fetus_area;
             }
 
             // calculate the ratio of fetus component in the pushed areas
@@ -440,6 +490,10 @@ public class ControllerScript_massVer : MonoBehaviour
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         mesh_to_modify.vertices = original_pos;
         mesh_to_modify.normals = original_normals;
+        foreach (Spring spr in springs)
+        {
+            spr.SetCurPosRatio(0f);
+        }
     }
 }
 

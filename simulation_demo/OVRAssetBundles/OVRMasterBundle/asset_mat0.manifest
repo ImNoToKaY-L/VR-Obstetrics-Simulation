@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3463697310
+CRC: 2731328008
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 949be70f8525d357d2402a0e8ba69346
+    Hash: a76401a6d1eb7c7ae6332bcd60cc5ee9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 10a6a558690295dadb3dd990eda0821a
@@ -18,7 +18,6 @@ Assets:
 - Assets/Models/Materials/silhouette_Lady_Silhouette1.mat
 - Assets/Oculus/SampleFramework/Core/Locomotion/Materials/TeleportLaser.mat
 - Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Materials/SkyboxForRealtime.mat
-- Assets/Oculus/SampleFramework/Usage/Locomotion/Materials/DebugDrawLine.mat
 - Assets/Oculus/VR/Materials/Arrow.mat
 - Assets/Models/Materials/Lady_Material.mat
 Dependencies:

@@ -8,7 +8,7 @@ public class ControllerScript : MonoBehaviour
 {
     public Text help_text;
     public LineRenderer laser_line_renderer;
-    public OVRPlayerController cam;
+    public OVRCameraRig cam;
     public GameObject belly;
     public GameObject fetus_head;
     public Material m_surgeon_area;
@@ -36,6 +36,7 @@ public class ControllerScript : MonoBehaviour
     {
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
+
         uiStop = false;
         push = false;
         modify_index = -1;
@@ -45,6 +46,7 @@ public class ControllerScript : MonoBehaviour
         // range_factor = 1 / (2 * Mathf.PI * theta * theta); 
         gaussian_amplitude = 0.000000000000000000000001f; // This will not influence the result
         m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
+
         sw.Stop();
         System.TimeSpan ts = sw.Elapsed;
         print("Initial time for gaussian method: " + ts.TotalMilliseconds);
@@ -302,8 +304,6 @@ public class ControllerScript : MonoBehaviour
         }
         if (hit.collider.gameObject.GetComponent<MeshFilter>())
             return hit.collider.gameObject.GetComponent<MeshFilter>().sharedMesh.triangles[hit.triangleIndex * 3 + max_index];
-        else if (hit.collider.gameObject.GetComponent<SkinnedMeshRenderer>())
-            return hit.collider.gameObject.GetComponent<SkinnedMeshRenderer>().sharedMesh.triangles[hit.triangleIndex * 3 + max_index];
         else // error: no renderer
             return -1;
     }

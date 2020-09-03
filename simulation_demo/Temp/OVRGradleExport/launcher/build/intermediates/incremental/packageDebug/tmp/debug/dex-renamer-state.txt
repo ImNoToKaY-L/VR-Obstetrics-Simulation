@@ -1,0 +1,16 @@
+#Thu Sep 03 23:20:38 CST 2020
+path.3=classes.dex
+path.2=classes.dex
+path.1=classes.dex
+renamed.4=classes5.dex
+path.0=classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+base.4=E\:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\transforms\\dexMerger\\debug\\4
+renamed.0=classes.dex
+base.3=E\:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\transforms\\dexMerger\\debug\\3
+base.2=E\:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\transforms\\dexMerger\\debug\\2
+base.1=E\:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+base.0=E\:\\academic\\IC\\DT\\simulation_project\\cloudflareworkers\\VR-Obstetrics-Simulation\\simulation_demo\\Temp\\OVRGradleExport\\launcher\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.4=classes.dex
