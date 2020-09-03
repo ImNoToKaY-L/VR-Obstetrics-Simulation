@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 337991807
+CRC: 3990299876
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ac119f5b3749ea5719038c13e718ae24
+    Hash: 4adf3c2827ae8f5465da93224469c891
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2ca5b777dc1d2ba447857ce6613c711e
+    Hash: 16c353b19a242675560194f4af79d7e2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,17 +29,9 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
-- Class: 108
-  Script: {instanceID: 0}
-- Class: 111
-  Script: {instanceID: 0}
-- Class: 137
-  Script: {instanceID: 0}
 Assets:
 - Assets/Models/Lady_high_precision.mb
 - Assets/Models/fetus.mb
-- Assets/Models/Pregnant_Fetus_Uterus_2008.mb
 - Assets/Models/Lady.mb
 Dependencies:
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_jpg0
-- E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0

@@ -2,61 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class spring
+class Spring
 {
-    public int id;
+
+    public static float kh = 0.0001f;
+    public static float kn = 0.0001f;
+    public static float push_distance;
+    private float cur_pos_ratio = 0f;
+    private int id;
     private Vector3 ori_pos;
-    private float push_distance;
-    public float ko = 2f;
-    public float ks = 0.01f;
-    public float cur_pos_ratio = 0f;
     private HashSet<int> neighbour;
-    private HashSet<int> influence_region;
+    private float mass;
+    private float neighbour_distance;
 
-    public spring()
+    public Spring()
     {
-        neighbour = new HashSet<int>();
         neighbour = new HashSet<int>();
     }
 
-    public void resetKoKs(float ko, float ks)
+
+    public void SetCurPosRatio(float ratio)
     {
-        this.ko = ko;
-        this.ks = ks;
+        this.cur_pos_ratio = ratio;
     }
 
-    public void setID(int id)
+    public void SetID(int id)
     {
         this.id = id;
     }
-    
-    public void setDistance(float dis)
+
+    public void CalculateMass(float total_dis)
     {
-        this.push_distance = dis;
+        this.mass = 20f * neighbour_distance / total_dis;
     }
-    public void addNeighbour(int neighboor_index)
+    
+    public void SetPushDistance(float dis)
+    {
+        push_distance = dis;
+    }
+    public void SetNeighbourDistance(float dis)
+    {
+        this.neighbour_distance = dis;
+    }
+    public void AddNeighbour(int neighboor_index)
     {
         this.neighbour.Add(neighboor_index);
     }
-    public void setOriPos(Vector3 pos)
+    public void SetOriPos(Vector3 pos)
     {
         this.ori_pos = pos;
     }
-    public float getPosRatio()
-    {
-        return cur_pos_ratio;
-    }
-    public Vector3 getOriPos()
+
+    public Vector3 GetOriPos()
     {
         return ori_pos;
     }
-
-    public HashSet<int> getneighbours()
+    public int GetID()
+    {
+        return id;
+    }
+    public HashSet<int> GetNeighbour()
     {
         return neighbour;
     }
-
-    public Vector3 calcposi(Vector3 dir)
+    public Vector3 GetPosition(Vector3 dir)
     {
         Vector3 cur_pos = new Vector3(ori_pos.x + dir.x * push_distance * cur_pos_ratio,
                                     ori_pos.y + dir.y * push_distance * cur_pos_ratio,
@@ -64,44 +73,49 @@ class spring
         return cur_pos;
     }
 
-    public float calc_prefix(spring A, spring B, Vector3 dir)
+    public float GetCurPosRatio()
+    {
+        return cur_pos_ratio;
+    }
+    private float CalProjection(Spring A, Spring B, Vector3 dir)
     {
         // A for local point, B for neighboor point
         // get position information
-        Vector3 a_oripos = A.getOriPos();
-        Vector3 a_endpos = new Vector3(a_oripos.x + dir.x * A.push_distance, a_oripos.y + dir.y * A.push_distance, a_oripos.z + dir.z * A.push_distance);
+        Vector3 a_oripos = A.GetOriPos();
+        Vector3 a_endpos = new Vector3(a_oripos.x + dir.x * push_distance, a_oripos.y + dir.y * push_distance, a_oripos.z + dir.z * push_distance);
 
         // update the position
-        Vector3 a = A.calcposi(dir);
-        Vector3 b = B.calcposi(dir);
+        Vector3 a = A.GetPosition(dir);
+        Vector3 b = B.GetPosition(dir);
 
-        // calculate the spring length
+        // calculate A spring length
         float[] vera = new float[3];
-        float[] verb = new float[3];
         vera[0] = a_endpos.x - a_oripos.x;
         vera[1] = a_endpos.y - a_oripos.y;
         vera[2] = a_endpos.z - a_oripos.z;
+        float lena = Mathf.Sqrt(vera[0] * vera[0] + vera[1] * vera[1] + vera[2] * vera[2]);
+
+        // spring between mass A and mass B
+        float[] verb = new float[3];
         verb[0] = b[0] - a[0];
         verb[1] = b[1] - a[1];
         verb[2] = b[2] - a[2];
 
-        float lena = Mathf.Sqrt(vera[0] * vera[0] + vera[1] * vera[1] + vera[2] * vera[2]);
-
-        // vector components on the vertical spring
-        float prefix = (vera[0] * verb[0] + vera[1] * verb[1] + vera[2] * verb[2]) / lena;
-        return prefix;
+        // vector projection on the vertical spring
+        float proj = (vera[0] * verb[0] + vera[1] * verb[1] + vera[2] * verb[2]) / lena;
+        return proj;
     }
 
-    public void posifixing(Hashtable spring_table, Vector3 dir)
+    public void PosUpdate(Spring[] springs, Vector3 dir)
     {
-        float mpf = -this.cur_pos_ratio * this.ks;
+        float mpf = -this.cur_pos_ratio * kn;
         foreach (int i in this.neighbour)
         {
             //Console.WriteLine("({0,2}", i);
-            mpf += calc_prefix((spring)spring_table[this.id], (spring)spring_table[i], dir) * this.ko;
+            mpf += CalProjection(springs[this.id], springs[i], dir) * kh;
         }
         //Console.WriteLine("");
-        this.cur_pos_ratio += mpf;
+        this.cur_pos_ratio += mpf / mass;
         if (this.cur_pos_ratio > 1)
         {
             this.cur_pos_ratio = 1;

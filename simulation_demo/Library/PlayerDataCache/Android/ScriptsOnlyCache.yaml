@@ -59,27 +59,27 @@ ScriptsOnlyBuild:
     - Class: 109
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11320}
+      Script: {instanceID: 11346}
     - Class: 114
-      Script: {instanceID: 11576}
+      Script: {instanceID: 11602}
     - Class: 114
-      Script: {instanceID: 11636}
+      Script: {instanceID: 11662}
     - Class: 114
-      Script: {instanceID: 12148}
+      Script: {instanceID: 12174}
     - Class: 114
-      Script: {instanceID: 12260}
+      Script: {instanceID: 12286}
     - Class: 114
-      Script: {instanceID: 12778}
+      Script: {instanceID: 12804}
     - Class: 114
-      Script: {instanceID: 13186}
+      Script: {instanceID: 13212}
     - Class: 114
-      Script: {instanceID: 13658}
+      Script: {instanceID: 13684}
     - Class: 114
-      Script: {instanceID: 13702}
+      Script: {instanceID: 13728}
     - Class: 114
-      Script: {instanceID: 13778}
+      Script: {instanceID: 13804}
     - Class: 114
-      Script: {instanceID: 14200}
+      Script: {instanceID: 14226}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -97,12 +97,6 @@ ScriptsOnlyBuild:
     - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
-  - hash:
-      serializedVersion: 2
-      Hash: e59283617e4e94776282629848b86af1
-    assemblyName: Oculus.VR.dll
-    namespaceName: 
-    className: MassSpringScript
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -381,7 +375,7 @@ ScriptsOnlyBuild:
     className: GridLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: d872b8dcffaaf9555def49fee3b9d317
+      Hash: a7d0646fe4bec38a46870ef408f13094
     assemblyName: Oculus.VR.dll
     namespaceName: 
     className: ControllerScript_massVer

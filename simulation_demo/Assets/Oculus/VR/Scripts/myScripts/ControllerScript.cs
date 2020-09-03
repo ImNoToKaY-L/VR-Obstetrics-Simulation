@@ -337,19 +337,19 @@ public class ControllerScript : MonoBehaviour
             //print(distance);
             if (distance < affect_region)
             {
-                float z_gaussian = Gaussian_function(dx, dy, dz);
-                change_vertices.Add(i, z_gaussian);
-                if (max_gaussian < z_gaussian)
-                    max_gaussian = z_gaussian;
-                if (min_gaussian > z_gaussian)
-                    min_gaussian = z_gaussian;
+                float gau_result = Gaussian_function(dx, dy, dz);
+                change_vertices.Add(i, gau_result);
+                if (max_gaussian < gau_result)
+                    max_gaussian = gau_result;
+                if (min_gaussian > gau_result)
+                    min_gaussian = gau_result;
             }
         }
 
         // calculate ratio and interpolate between 0 and max dz
         change_vertices = change_vertices.ToDictionary(x => x.Key, x => (x.Value - min_gaussian) / (max_gaussian - min_gaussian));
         int[] fetus_status_count = { 0, 0, 0 };
-        Vector3 push_point_dir = -transform.forward;
+        Vector3 push_point_dir = belly.transform.InverseTransformDirection(-transform.forward); // to local position
         foreach (var vertex in change_vertices)
         {
             // use push direction and factor to calculate the change 
@@ -361,7 +361,7 @@ public class ControllerScript : MonoBehaviour
             vertices[vertex.Key].z -= push_delta_change.z;
 
             Vector3 push_point = belly.transform.TransformPoint(vertices[vertex.Key]); // to world position
-            int fetus_status = CheckFetusPos(push_point, push_point_dir);
+            int fetus_status = CheckFetusPos(push_point, transform.forward);
 
             if (fetus_status == 1 || fetus_status == 2)
             {
@@ -428,7 +428,7 @@ public class ControllerScript : MonoBehaviour
 
     int CheckFetusPos(Vector3 pos, Vector3 norm)
     {
-        Ray ray = new Ray(pos, -norm); // norm dir
+        Ray ray = new Ray(pos, norm); // norm dir
 
         
         RaycastHit hit;

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3222663106
+CRC: 1558430610
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 876248437c3569d6a7d6df104f8e0f8b
+    Hash: 68b212fa2614ea326ec2c31a96fd5ad1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2b73856eb5ce254ac701dc9765b4a329
+    Hash: 624979bf62f791f4d477d19641e940af
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -121,7 +121,7 @@ Dependencies:
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mat0
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_3ds0
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_prefab0
+- E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_fbx0
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mb0
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_mixer0
-- E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_fbx0
 - E:/academic/IC/DT/simulation_project/cloudflareworkers/VR-Obstetrics-Simulation/simulation_demo/OVRAssetBundles/OVRMasterBundle/asset_wav0

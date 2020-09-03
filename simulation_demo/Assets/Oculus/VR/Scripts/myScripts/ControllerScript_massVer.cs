@@ -16,8 +16,7 @@ public class ControllerScript_massVer : MonoBehaviour
     public Material fetus_head_area;
     public AudioSource sound_effect;
     public float touch_vibration_freq;
-    public float press_distance;
-    private Hashtable springs;
+    private Spring[] springs;
     private bool push;
     private int modify_index;
     private Vector3[] original_pos;
@@ -25,11 +24,13 @@ public class ControllerScript_massVer : MonoBehaviour
     private bool m_isOculusGo;
 
 
-    // debug use!!
-    private float last_ko;
-    private float last_ks;
-    public float ko;
-    public float ks;
+    // change param
+    private float last_kh;
+    private float last_kn;
+    private float last_dis;
+    public float kh;
+    public float kn;
+    public float press_distance;
 
 
     // Start is called before the first frame update
@@ -40,19 +41,19 @@ public class ControllerScript_massVer : MonoBehaviour
         push = false;
         press_distance = 0.02f;
         touch_vibration_freq = 0.1f;
-        springs = new Hashtable();
         modify_index = -1;
         help_text.text = "No detection";
         original_pos = belly.GetComponent<MeshFilter>().sharedMesh.vertices;
         original_normals = belly.GetComponent<MeshFilter>().sharedMesh.normals;
         m_isOculusGo = (OVRPlugin.productName == "Oculus Go");
+        springs = new Spring[original_pos.Length];
         InitSprings();
 
         // vars for changing param
-        last_ko = ((spring)springs[0]).ko;
-        last_ks = ((spring)springs[0]).ks;
-        ko = last_ko;
-        ks = last_ks;
+        last_kh = Spring.kh;
+        last_kn = Spring.kn;
+        kh = last_kh;
+        kn = last_kn;
         sw.Stop();
         System.TimeSpan ts = sw.Elapsed;
         print("Initial time for mass spring method: " + ts.TotalMilliseconds);
@@ -61,14 +62,14 @@ public class ControllerScript_massVer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(last_ko != ko || last_ks != ks)
+        if(last_kh != kh || last_kn != kn || last_dis != press_distance)
         {
-            foreach(spring spr in springs.Values)
-            {
-                spr.resetKoKs(ko, ks);
-                last_ko = ko;
-                last_ks = ks;
-            }
+            Spring.kh = kh;
+            Spring.kn = kn;
+            Spring.push_distance = press_distance;
+            last_kh = kh;
+            last_kn = kn;
+            last_dis = press_distance;
         }
 
         // update direction 
@@ -80,7 +81,7 @@ public class ControllerScript_massVer : MonoBehaviour
 
         if (push)
         {
-            ((spring)springs[modify_index]).cur_pos_ratio = 1;
+            (springs[modify_index]).SetCurPosRatio(1f);
         }
 
         // TODO RESET
@@ -103,13 +104,13 @@ public class ControllerScript_massVer : MonoBehaviour
         for (int i = 0; i < vertices.Length; i++)
         {
             Vector3 vertex = vertices[i];
-            spring spr = new spring();
+            Spring spr = new Spring();
 
             // get the position info from the vertex
-            spr.setDistance(press_distance);
-            spr.setID(i);
-            spr.setOriPos(vertex);
-            springs.Add(i, spr);
+            spr.SetPushDistance(press_distance);
+            spr.SetID(i);
+            spr.SetOriPos(vertex);
+            springs[i] = spr;
         }
 
         // get neighbour info
@@ -118,10 +119,32 @@ public class ControllerScript_massVer : MonoBehaviour
             int ver1 = triangles[index];
             int ver2 = triangles[index + 1];
             int ver3 = triangles[index + 2];
-            ((spring)springs[ver1]).addNeighbour(ver2); ((spring)springs[ver1]).addNeighbour(ver3);
-            ((spring)springs[ver2]).addNeighbour(ver1); ((spring)springs[ver2]).addNeighbour(ver3);
-            ((spring)springs[ver3]).addNeighbour(ver2); ((spring)springs[ver3]).addNeighbour(ver1);
+            springs[ver1].AddNeighbour(ver2); springs[ver1].AddNeighbour(ver3);
+            springs[ver2].AddNeighbour(ver1); springs[ver2].AddNeighbour(ver3);
+            springs[ver3].AddNeighbour(ver1); springs[ver3].AddNeighbour(ver2);
         }
+
+        // calculate the total distance to neighbours for each particle
+        float total_dis = 0;
+        foreach (Spring spr in springs)
+        {
+            HashSet<int> neighs = spr.GetNeighbour();
+            float spr_total_dis = 0;
+            foreach (int neigh in neighs)
+            {
+                float dis = Vector3.Distance(vertices[neigh], vertices[spr.GetID()]);
+                spr_total_dis += dis;
+            }
+            spr.SetNeighbourDistance(spr_total_dis);
+            total_dis += spr_total_dis;
+        }
+
+        // use the distance to calculate the mass
+        foreach (Spring spr in springs)
+        {
+            spr.CalculateMass(total_dis);
+        }
+        
     }
 
     // Check the laser collision point with the belly mesh
@@ -173,8 +196,7 @@ public class ControllerScript_massVer : MonoBehaviour
                     help_text.text = "Pushed";
 
                     // avoid continuous push action
-                    if (hit_vertex != modify_index)
-                        ResetModel();
+
                     modify_index = hit_vertex;
                     
                     // enable the vibration
@@ -322,34 +344,27 @@ public class ControllerScript_massVer : MonoBehaviour
         Mesh mesh_to_modify = belly.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices = mesh_to_modify.vertices;
         int[] fetus_status_count = { 0, 0, 0 };
-        Vector3 dir = transform.forward;
+        Vector3 push_point_dir = belly.transform.InverseTransformDirection(transform.forward);
         if (modify_index != -1)
         {
-            foreach (spring spr in springs.Values)
+            foreach (Spring spr in springs)
             {
-                Vector3 ori_vec = vertices[spr.id];
-                float distance_to_centre = Mathf.Pow(ori_vec.x - vertices[modify_index].x, 2) +
-                                            Mathf.Pow(ori_vec.y - vertices[modify_index].y, 2) +
-                                            Mathf.Pow(ori_vec.z - vertices[modify_index].z, 2);
-                distance_to_centre = Mathf.Sqrt(distance_to_centre);
-                if (distance_to_centre < 0.04f)
+                Vector3 ori_vec = spr.GetOriPos();
+                float distance_to_centre = Vector3.Distance(ori_vec, vertices[modify_index]);
+                spr.PosUpdate(springs, push_point_dir);
+                Vector3 vec = spr.GetPosition(push_point_dir);
+                if (push && spr.GetCurPosRatio() > 0.2) // pushed, check fetus position
                 {
-                    spr.posifixing(springs, dir);
-                    Vector3 vec = spr.calcposi(dir);
-                    if (push && (vec.x != ori_vec.x || vec.y != ori_vec.y || vec.z != ori_vec.z)) // pushed, check fetus position
+                    Vector3 push_point = belly.transform.TransformPoint(vec); // to world position
+                    int fetus_status = CheckFetusPos(push_point, push_point_dir);
+                    if (fetus_status == 1 || fetus_status == 2)
                     {
-                        Vector3 push_point = belly.transform.TransformPoint(vec); // to world position
-                        int fetus_status = CheckFetusPos(push_point, dir);
-                        if (fetus_status == 1 || fetus_status == 2)
-                        {
-                            vec = new Vector3((vec.x + ori_vec.x) * 0.5f, (vec.y + ori_vec.y) * 0.5f, (vec.z + ori_vec.z) * 0.5f);
-                        }
-                        fetus_status_count[fetus_status]++;
+                        vec = new Vector3((vec.x + ori_vec.x) * 0.5f, (vec.y + ori_vec.y) * 0.5f, (vec.z + ori_vec.z) * 0.5f);
                     }
-
-                    vertices[spr.id] = vec;
+                    fetus_status_count[fetus_status]++;
                 }
 
+                vertices[spr.GetID()] = vec;
             }
         }
         
@@ -393,8 +408,8 @@ public class ControllerScript_massVer : MonoBehaviour
 
         sw1.Stop();
         System.TimeSpan ts1 = sw1.Elapsed;
-        //if (push)
-            //print("Time for push some point: " + ts1.TotalMilliseconds);
+        if (push)
+            print("Time for push some point: " + ts1.TotalMilliseconds);
 
     }
 
